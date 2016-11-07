@@ -1,0 +1,35 @@
+development:
+ adapter: postgis
+ encoding: unicode
+ database: Onmap_development
+ host:     localhost
+ pool: 5
+ username: user1
+ password: password1
+ postgis_extension: postgis      # default is postgis
+ postgis_schema: public          # default is public
+ schema_search_path: public,postgis
+
+test:
+ adapter: postgis
+ encoding: unicode
+ database: Onmap_test
+ host:     localhost
+ pool: 5
+ username: user1
+ password: password1
+ postgis_extension: postgis      # default is postgis
+ postgis_schema: public          # default is public
+ schema_search_path: public,postgis
+
+production:
+ adapter: postgis
+ encoding: unicode
+ database: Onmap_production
+ host:     localhost
+ pool: 5
+ username: user1
+ password: password1
+ postgis_extension: postgis      # default is postgis
+ postgis_schema: public          # default is public
+ schema_search_path: public,postgis

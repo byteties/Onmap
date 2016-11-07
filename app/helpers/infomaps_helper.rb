@@ -1,0 +1,2 @@
+module InfomapsHelper
+end
