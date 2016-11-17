@@ -1,8 +1,23 @@
 class InfomapsController < ApplicationController
 	def index
-		#@infomap = Infomap.find(1)
-	end
+		check_name = params[:station]
+		if(check_name != nil)
+			data = Infomap.find(check_name)
+			@name = data.name_station
+			@x = data.lonlat.x
+			@y = data.lonlat.y
+		end
 
+		# check_draw = params[:draw]
+		# if(check_draw == 2)
+		# 	@check_draw = "2"
+		# elsif (check_draw == 3)
+		# 	@check_draw = "3"
+		# else
+
+		# end				
+	end
+ 
 	def test
 		stg01 = Infomap.find(1).lonlat
 		stg02 = Infomap.find(2).lonlat
@@ -41,6 +56,8 @@ class InfomapsController < ApplicationController
 		within.each do |w|
 			@within = w.name_station
 		end
+
+		
 		# @result = Infomap.where("ST_DWithin(lonlat,ST_GeomFromText('POINT(20 100)',26918),1000)")
 		# polygons = ActiveRecord::Base.connection.execute("SELECT ST_Area(shape2) FROM infomaps")
 		# polygons.each do |record|

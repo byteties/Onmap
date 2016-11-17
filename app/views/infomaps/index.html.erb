@@ -2,17 +2,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CMU</title>
+	<title>CR</title>
 	<meta charset="utf-8" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+		
 </head>
 <body>
-	<div id="map" style="width: 100%; height: 600px; margin: 0px"></div>
-
 	<script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+
+	<div id="mapid" style="width: 85%; height: 550px; margin: 0px ;float:right; ">
+
 	<script>
 		var reservoir = new L.LayerGroup();
 
@@ -24,9 +26,9 @@
 	    var satellite   = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: mbAttr}),
 		    streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
 
-		var map = L.map('map', {
-			center: [18.79533, -621.03752],
-			zoom: 14,
+		var mymap = L.map('mapid', {
+			center: [19.9088, 99.83414],
+			zoom: 11,
 			layers: [streets, reservoir]
 		});
 
@@ -36,14 +38,56 @@
 		};
 
 		var overlays = {
-			"อ่างแก้ว": reservoir
+			// "": reservoir
 		};
 		
-		L.control.layers(baseLayers, overlays).addTo(map);		
+		L.control.layers(baseLayers, overlays).addTo(mymap);		
 		
-		L.marker().addTo(map)
 
-
+		var popup = L.popup();
+			
+		<% if (@name != nil)%>
+			marker = L.marker([<%=@y%>, <%=@x%>]).addTo(mymap)
+			marker.bindPopup("<%= @name%>").openPopup();
+		<% end %>		
+		
+   		var clickCircle;
+		function onMapClick(e) {
+				<% if (params[:draw] == 2)%>
+				    if (clickCircle != undefined) {
+					      mymap.removeLayer(clickCircle);
+					    };
+					    clickCircle = L.circle(e.latlng, 1609 * 10, {
+					      color: '#f07300',
+					      fillOpacity: 0,
+					      opacity: 0.5
+					    }).addTo(mymap);
+				<% else %>
+				 popup
+			        .setLatLng(e.latlng)
+			        .setContent("You clicked the map at " + e.latlng.toString())
+			        .openOn(mymap);
+			    <% end %>
+			}			
+			mymap.on('click', onMapClick);
+		
 	</script>
+
+	</div>
+	<div class='menu' >
+		<td>Search by Name Station</td>
+		<%= form_tag infomaps_index_path, method: 'get' do%>
+		<td>
+			<%= select_tag(:station,options_from_collection_for_select(Infomap.all, :id, :name_station,params[:station]), onchange: "this.form.submit()")%>
+		</td> 
+		<%end%>
+		<td>Search by Area</td>
+		<%= form_tag infomaps_index_path, method: 'get' do%>
+		<td>
+			<%= select_tag(:draw,options_for_select([['off', 1], ['circle', 2], ['polygon',3]],params[:draw]), onchange: "this.form.submit()")%>
+		</td> 
+		<%end%>
+	</div>
+
 </body>
 </html>
