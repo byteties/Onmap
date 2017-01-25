@@ -7,17 +7,58 @@ class InfomapsController < ApplicationController
 			@x = data.lonlat.x
 			@y = data.lonlat.y
 		end
-
-		# check_draw = params[:draw]
-		# if(check_draw == 2)
-		# 	@check_draw = "2"
-		# elsif (check_draw == 3)
-		# 	@check_draw = "3"
-		# else
-
-		# end				
+		
 	end
- 
+
+	def point
+		lng = params[:lng][0..8]
+		lat = params[:lat][0..8]
+		point = 'POINT('+lng+' '+lat+')'
+		count = Infomap.count
+		for i in 1..count
+			data = Infomap.find(i)
+			if(data.area != nil)
+				checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{point}'),ST_GeomFromText('#{data.area}'))")
+				if(checkinpolygon != [])
+					respond_to do |format|
+    					format.json { render json: {"lat"=> lat,"lng"=>lng ,"data" =>data}}
+  					end
+				end
+			end	
+		end
+
+	end			
+	
+	def circle
+		y = params[:DataLocation]
+		z = y.gsub! 'LatLng','POINT '
+		locat = z.gsub! ',',' '
+		radius = params[:radius]
+		x = Infomap.all
+		x.each do |data|
+			@checkincircle = Infomap.find_by_sql("SELECT name_station FROM infomaps
+			WHERE ST_Within(
+				ST_GeometryFromText('#{data.lonlat}'),
+				ST_GeometryFromText('#{locat}'),
+				5)")
+			# if(checkincircle == true)
+			# 	@array << data.lonlat
+			# end			
+		end
+		respond_to infomaps_index
+	end 	
+
+ 	def testajax
+ 		lat = params[:lat]
+ 		lng = params[:lng]
+ 		point = 'POINT('+lng+' '+lat+')'	
+ 		respond_to do |format|
+    		format.json { render json: {"lat"=> lat,"lng"=>lng ,"latlng" =>point}}
+  		end
+    	
+ 	end
+
+ 	
 	def test
 		stg01 = Infomap.find(1).lonlat
 		stg02 = Infomap.find(2).lonlat
@@ -39,6 +80,13 @@ class InfomapsController < ApplicationController
 			@dwithin = d.name_station
 		end
 
+		testdwithin = Infomap.where("ST_DWithin(
+	        ST_GeomFromText('#{stg01}'),
+	        ST_GeomFromText('#{stg02}'),
+	        1
+	      )")
+		@testall_dwithin = testdwithin
+
 		within = Infomap.find_by_sql("SELECT name_station
 			FROM infomaps
 			WHERE ST_Within(
@@ -57,8 +105,24 @@ class InfomapsController < ApplicationController
 			@within = w.name_station
 		end
 
+		@testwithin = Infomap.find_by_sql("SELECT name_station
+			FROM infomaps
+			WHERE ST_Within(
+			ST_GeomFromText('POINT(99.71274 20.79207)'),
+			ST_GeomFromText('POLYGON((99.679663 19.188582,100.558569 19.923608,99.827441 20.566058,98.841418 19.790085,99.679663 19.188582))'))")
+
+		@test = Infomap.where("ST_DWithin(
+	        ST_GeomFromText('#{stg01}'),
+	        ST_GeomFromText('point (100.47661 20.62297)'),
+	        1
+	      )")
 		
-		# @result = Infomap.where("ST_DWithin(lonlat,ST_GeomFromText('POINT(20 100)',26918),1000)")
+		@target = Infomap.last
+		@degree_radius = 0.2249
+		@valid_points = Infomap.where("ST_DWithin(lonlat, ST_PointFromText('#{@target.lonlat}',  #{@degree_radius}))")
+
+		#POINT(99.71274 20.79207)
+		#'POLYGON((99.679663 19.188582,100.558569 19.923608,99.827441 20.566058,98.841418 19.790085,99.679663 19.188582))'		# @result = Infomap.where("ST_DWithin(lonlat,ST_GeomFromText('POINT(20 100)',26918),1000)")
 		# polygons = ActiveRecord::Base.connection.execute("SELECT ST_Area(shape2) FROM infomaps")
 		# polygons.each do |record|
   		# 				@polygon = record
@@ -109,5 +173,5 @@ class InfomapsController < ApplicationController
 		#   	geo.each do |result|
 		#   		@geo = result
 		#   	end
-	end
+	 end
 end

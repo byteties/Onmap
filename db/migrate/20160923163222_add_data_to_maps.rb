@@ -3,15 +3,11 @@ class AddDataToMaps < ActiveRecord::Migration[5.0]
   	create_table :infomaps do |t|
   		t.string :name_station
   		t.string :name_location
-      t.integer :waterlevel
-      t.integer :rain
-      t.integer :water_sealevel
-      t.integer :tropical_level
-      t.integer :bank_level
-      t.string :river_name
-      t.string :place
-		  t.st_point :lonlat, geographic: true
-      t.integer :time
+      t.string :river
+      t.string :sub_district
+      t.string :district
+      t.st_point :lonlat, geographic: true
+      t.st_polygon :area, geographic: true
   		t.timestamps null: false
   	end
   end

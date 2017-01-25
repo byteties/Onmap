@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003090036) do
+ActiveRecord::Schema.define(version: 20170106065443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,17 +19,26 @@ ActiveRecord::Schema.define(version: 20161003090036) do
   create_table "infomaps", force: :cascade do |t|
     t.string    "name_station"
     t.string    "name_location"
-    t.integer   "waterlevel"
-    t.integer   "rain"
-    t.integer   "water_sealevel"
-    t.integer   "tropical_level"
-    t.integer   "bank_level"
-    t.string    "river_name"
-    t.string    "place"
-    t.geography "lonlat",         limit: {:srid=>4326, :type=>"point", :geographic=>true}
-    t.integer   "time"
-    t.datetime  "created_at",                                                              null: false
-    t.datetime  "updated_at",                                                              null: false
+    t.string    "river"
+    t.string    "sub_district"
+    t.string    "district"
+    t.geography "lonlat",        limit: {:srid=>4326, :type=>"point", :geographic=>true}
+    t.geography "area",          limit: {:srid=>4326, :type=>"polygon", :geographic=>true}
+    t.datetime  "created_at",                                                               null: false
+    t.datetime  "updated_at",                                                               null: false
+  end
+
+  create_table "storages", force: :cascade do |t|
+    t.integer  "infomap_id"
+    t.string   "name_station"
+    t.integer  "rain"
+    t.integer  "temperatare"
+    t.integer  "water_level"
+    t.integer  "warning_level"
+    t.integer  "critical_level"
+    t.string   "time"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
 end
