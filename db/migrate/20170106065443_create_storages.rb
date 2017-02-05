@@ -8,6 +8,8 @@ class CreateStorages < ActiveRecord::Migration[5.0]
       t.integer :water_level
       t.integer :warning_level
       t.integer :critical_level
+      t.integer :checkflood
+      t.integer :checkrain
       t.string  :time
       t.timestamps
     end

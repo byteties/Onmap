@@ -7,132 +7,20 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+	<!-- <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
 </head>
 <body>
-
-	<a href="#" onclick="onMapClick()"><div id="mapid" style="width: 85%; height: 550px; margin: 0px ;float:right; "></a>
-<!-- 	<osm-script><bbox-query s="18.9790" w="99.1022" n="20.4759" e="100.5936"/><print/></osm-script>
- -->	<script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
-
-	<script>
-
-		var type = 0;
-		var reservoir = new L.LayerGroup();
-
-		var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYmlnYnl0ZSIsImEiOiJjaXM5ejEzMzkwMDZiMm9vZjNhbWZhejYwIn0.GKqsUdM5SNhJ_JelmqAOGQ';
-
-	    var satellite   = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: mbAttr}),onclick
-		    streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
-
-
-		var mymap = L.map('mapid', {
-			center: [19.9088, 99.83414],
-			zoom: 11,
-			layers: [streets, reservoir]
-		});
-
-		var baseLayers = {
-			"Streets": streets,
-			"Satellite": satellite			
-		};
-
-		var overlays = {
-			// "": reservoir
-		};
-		
-		L.control.layers(baseLayers, overlays).addTo(mymap);		
-		
-		function buttonClick(){
-			type = 1;
-		};
-		var clickCircle;
-		function onMapClick(e) {
-			if(type == 1){
-				if (clickCircle != undefined) {
-				mymap.removeLayer(clickCircle);
-				};
-
-				clickCircle = L.circle(e.latlng, 1609 * 5, {
-				  color: '#f07300',
-				  fillOpacity: 0.5,
-				  opacity: 0.5
-				}).addTo(mymap);
-
-				
-
-				var DataLocation = e.latlng.toString();	
-				alert(DataLocation);
-
-				//var radius =  5;			
-				// var url = $('#my_link').attr('href') + '?DataLocation=' + DataLocation;
-	    		// $('#my_link').attr('href', url);				
-			}
-			else{
-				var Point = e.latlng;
-				var lat = e.latlng.lat.toString();
-				var lng = e.latlng.lng.toString();
-				
-				var mylatlng = {lat:lat,lng:lng}
-				
-				$.ajax({
-				  type: "GET",
-				  url: 'infomaps/point',
-				  data: mylatlng,
-				  success: function(data){				  	
-				  	console.log(data);
-				  },				   
-        			error: function(jqXHR, textStatus, errorThrown) {
-            		alert("Error=" + errorThrown);
-        			}
-				});
-				// 
-				// document.getElementById('latlng').innerHTML = Point;
-				// var url = $('#my_link').attr('href') + '?point=' + point;
-	   			//	$('#my_link').attr('href', url);
-			}			
-		}mymap.on('click', onMapClick);
-		
-		// function loadDoc() {
-		//   var xhttp = new XMLHttpRequest();
-		//   xhttp.onreadystatechange = function() {
-		//     if (this.readyState == 4 && this.status == 200) {
-		//       document.getElementById("Point").innerHTML = this.responseText;
-		//     }
-		//   };
-		//   xhttp.open("POST", "infomaps/testajax", true);
-		//   // xhttp.setRequestHeader("Content-type", "infomaps/point");
-		//   xhttp.send(lat,lng);
-		// }
-		function plotmarker(){
-			var popup = L.popup();
-			<%if @name != nil%>
-				marker = L.marker([<%=@y%>, <%=@x%>]).addTo(mymap)
-				marker.bindPopup("<%= @name%>").openPopup();
-			<% end %>
-
-			<% if @arr != nil%>
-				<% @arr.each do |point|%>	
-					marker = L.marker([<%=point.y%>, <%=point.x%>]).addTo(mymap)
-					marker.bindPopup("<%= @name%>").openPopup();
-				<% end %>
-			<% end%>
-			
-		};
-		// if(type == 1){
-		// 	marker = L.marker(point.y, point.x]).addTo(mymap)
-		// 	marker.bindPopup(point).openPopup();
-		// }
-		
-				
-	</script>
-
+<div>
+	<a href="#" ><div id="mapid" style="width: 85%; height: 550px; margin: 0px ;float:right; "></a>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+	<script src="/app/assets/javascripts/map.js"></script>
+</div>
 	</div>
 	<button onclick="buttonClick()">วิธีการค้นหาแบบวงกลม</button>
 	<!-- <div><%= link_to "Go!", infomaps_circle_path  %></div> -->

@@ -29,6 +29,7 @@ $.getScript('http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js', fu
 	L.control.layers(baseLayers, overlays).addTo(mymap);
 
 	var clickCircle;
+	var marker;
 		function onMapClick(e) {
 				var Point = e.latlng;
 				var lat = e.latlng.lat.toString();
@@ -37,21 +38,30 @@ $.getScript('http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js', fu
 					lat:lat,
 					lng:lng
 				}
-				// console.log(latlng);
-				
+
 				$.ajax({
 				  type: "GET",
 				  url: 'infomaps/point',
-				  data: latlng,
-				  success: function(data){				  	
-				  	console.log(data);
-				  },				   
-        			error: function(jqXHR, textStatus, errorThrown) {
+				  data: latlng})
+				  .done(function(data){	
+				  	// alert(data.flooddata.id);
+				  	//data = JSON.parse(data);
+				  	//console.log(data.lat);
+				  	//var info = 	JSON.parse(data);	 	  	
+				  	if (marker != undefined) {
+						mymap.removeLayer(marker);
+					};
+				  	var popup = L.popup();
+					marker = L.marker([lat.toString(),lng.toString()]).addTo(mymap);
+					marker.bindPopup("ชื่อสถานี:"+data.flooddata.name_station+"<br>ระดับน้ำ:"+data.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+data.flooddata.critical_level).openPopup();
+				  	
+				  	// console.log(result);
+				  })				   
+        			.error(function(jqXHR, textStatus, errorThrown) {
             		alert("Error=" + errorThrown);
-        			}
-				});
+        			});
 				
 						
-		}mymap.on('click', onMapClick);
+		}mymap.on('click', onMapClick);		
 });
 

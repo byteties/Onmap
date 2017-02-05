@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20170106065443) do
     t.integer  "water_level"
     t.integer  "warning_level"
     t.integer  "critical_level"
+    t.integer  "checkflood"
+    t.integer  "checkrain"
     t.string   "time"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
