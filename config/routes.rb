@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-	root 'infomaps#test'
+	root 'infomaps#index'
 
 	get 'infomaps/index' ,to: 'infomaps#index' , as: 'infomaps_index'
 	post 'infomaps/circle' ,to: 'infomaps#circle' ,as: 'infomaps_circle'
