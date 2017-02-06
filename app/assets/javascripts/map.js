@@ -17,10 +17,10 @@ $.getScript('http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js', fu
 		layers: [streets, reservoir]
 	});
 
-	// var baseLayers = {
-	// 	"Streets": streets,
-	// 	"Satellite": satellite			
-	// };
+	var baseLayers = {
+		"Streets": streets,
+		"Satellite": satellite			
+	};
 
 	var overlays = {
 		// "": reservoir
