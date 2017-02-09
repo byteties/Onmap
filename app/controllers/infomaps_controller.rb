@@ -1,32 +1,37 @@
 class InfomapsController < ApplicationController
 	def index
-		check_name = params[:station]
-		if(check_name != nil)
-			data = Infomap.find(check_name)
-			@name = data.name_station
-			@x = data.lonlat.x
-			@y = data.lonlat.y
-		end		
+		
 	end
 
 	def point		
 		lng = params[:lng][0..8]
 		lat = params[:lat][0..8]
-		point = 'POINT('+lng+' '+lat+')'
-		count = Infomap.count
-		for i in 1..count
-			data = Infomap.find(i)
-			if(data.area != nil)
-				checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{point}'),ST_GeomFromText('#{data.area}'))")
-				if(checkinpolygon != [])
-					respond_to do |format|
-    					flooddata = Storage.where(infomap_id: data.id).last
-    					format.json { render json: {"lat"=> lat,"lng"=>lng ,"flooddata" =>flooddata}}
-  					end
-  					break
-				end
-			end	
-		end
+		type = params[:type]
+		startDate = params[:startDate]
+		finalDate = params[:finalDate]
+			point = 'POINT('+lng+' '+lat+')'
+			count = Infomap.count
+			for i in 1..count
+				data = Infomap.find(i)
+				if(data.area != nil)
+					checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{point}'),ST_GeomFromText('#{data.area}'))")
+					if(checkinpolygon != [])
+						respond_to do |format|
+							if(startDate != nil || finalDate != nil)
+		    					maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").maximum(:water_level)
+		    					minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").minimum(:water_level)
+								avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").average(:water_level).to_f
+								sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkflood)				
+								sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkrain)	
+								fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}")							
+							end		
+							flooddata = Storage.where(infomap_id: data.id).last
+	    					format.json { render json: {"lat"=> lat,"lng"=>lng ,"flooddata" =>flooddata ,"maxlevel"=>maxlevel,"minlevel"=>minlevel,"avglevel"=>avglevel,"sumflood"=>sumflood,"sumrain"=>sumrain,"fullData" => fullData}}
+	  					end
+	  					break
+					end
+				end	
+			end
 	end			
 	
 	def circle
