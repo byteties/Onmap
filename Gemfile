@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'angularjs-rails'
-gem "angular-leaflet-rails"
+gem 'angular-leaflet-rails'
 gem 'rego'
 gem 'activerecord-postgis-adapter'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

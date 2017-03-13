@@ -1,151 +1,64 @@
 <!DOCTYPE html>
-<html ng-app="myModule">
-<head>
-    <meta charset="utf-8" />
-    <title> Highcharts directive demo </title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-</head>
-<body ng-controller="myController">
+<html ng-app="demoapp">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+    <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+    <!-- Highchart-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
 
-     <hc-chart options="chartOptions">Placeholder for generic chart</hc-chart>
-     <hc-pie-chart title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+    </head>
+    <body>
+    <div id="map" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
 
     <script>
-        angular.module('myModule', [])
-            // Directive for generic chart, pass in chart options
-            .directive('hcChart', function () {
-                return {
-                    restrict: 'E',
-                    template: '<div></div>',
-                    scope: {
-                        options: '='
-                    },
-                    link: function (scope, element) {
-                        Highcharts.chart(element[0], scope.options);
-                    }
-                };
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib }),
+                map = new L.Map('map', { center: new L.LatLng(51.505, -0.04), zoom: 13 }),
+                drawnItems = L.featureGroup().addTo(map);
+        L.control.layers({
+            'osm': osm.addTo(map),
+            "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                attribution: 'google'
             })
-            // Directive for pie charts, pass in title and data only    
-            .directive('hcPieChart', function () {
-                return {
-                    restrict: 'E',
-                    template: '<div></div>',
-                    scope: {
-                        title: '@',
-                        data: '='
-                    },
-                    link: function (scope, element) {
-                        Highcharts.chart(element[0], {
-                            chart: {
-                                type: 'pie'
-                            },
-                            title: {
-                                text: scope.title
-                            },
-                            plotOptions: {
-                                pie: {
-                                    allowPointSelect: true,
-                                    cursor: 'pointer',
-                                    dataLabels: {
-                                        enabled: true,
-                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                                    }
-                                }
-                            },
-                            series: [{
-                                data: scope.data
-                            }]
-                        });
-                    }
-                };
-            })
-            .controller('myController', function ($scope) {
-                
-                // Sample options for first chart
-                $scope.chartOptions = {
-                    title: {
-                        text: 'Temperature data'
-                    },
-                    xAxis: {
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                    },
+        }, { 'drawlayer': drawnItems }, { position: 'topleft', collapsed: false }).addTo(map);
+        map.addControl(new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems,
+                poly: {
+                    allowIntersection: false
+                }
+            },
+            draw: {
+                polygon: {
+                    allowIntersection: false,
+                    showArea: true
+                }
+            }
+        }));
 
-                    series: [{
-                        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-                    }]
-                };
+        map.on(L.Draw.Event.CREATED, function (event) {
+            var layer = event.layer;
 
-                // Sample data for pie chart
-                $scope.pieData = [{
-                        name: "Microsoft Internet Explorer",
-                        y: 56.33
-                    }, {
-                        name: "Chrome",
-                        y: 24.03,
-                        sliced: true,
-                        selected: true
-                    }, {
-                        name: "Firefox",
-                        y: 10.38
-                    }, {
-                        name: "Safari",
-                        y: 4.77
-                    }, {
-                        name: "Opera",
-                        y: 0.91
-                    }, {
-                        name: "Proprietary or Undetectable",
-                        y: 0.2
-                }]
-            });
+            drawnItems.addLayer(layer);
+        });
+
     </script>
-</body>
+    </body>
 </html>
-
-
-<!-- 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>CR</title>
-	<meta charset="utf-8" />
-
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
-	
-</head>
-<body>
-	<div class="container">
-		<div class="col-md-12">
-			<div class="w3-panel w3-border w3-hover-border-red" align="center">
-			  <h1>ระบบวิเคราะห์การเกิดน้ำท่วมเชิงพืนทีและเชิงเวลาของจังหวัดเชียงราย</h1>
-			</div>
-		</div>
-	</div>
-	
-	<div class="container">
-		
-			</div>
-		</div> 
-		
-		<div class="col-md-12" align="center">
-			<div>
-				<a href="#" ><div id="mapid" style="width: 100%; height: 500px; margin: 0px ; "></a>
-				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-				<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
-				<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-				<script src="/app/assets/javascripts/map.js"></script>
-			</div>
-		</div>
-	</div>
-	
-
-</body>
-</html>
-
-
- -->

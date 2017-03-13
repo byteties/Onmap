@@ -50,32 +50,15 @@ class InfomapsController < ApplicationController
 		respond_to infomaps_index
 	end 	
 
- 	def testjson
- 	# 	result = Net::HTTP.get(URI.parse('http://www.crflood.com/data-service/data-level-now.php?s=stg03'))
-		# # parse JSON
-		# json = JSON.parse(result)
-
-		# drain = json['rain']
-		# dwaterlevel = json['water_sealevel'].map(&:to_i)
-		# dcriticallevel = json['critical_level'].map(&:to_i)
-
-		# if(drain != 0)
-		# 	numrain = 1
-		# else
-		# 	numrain = 0
-		# end
-		# if(dwaterlevel[0] >= dcriticallevel[0])
-		# 	numflood = 1
-		# else
-		# 	numflood = 0
-		# end
-		
-		# respond_to do |format|
-  #   		format.json { render json: {"rain"=> drain,"water_level"=>json['water_sealevel'][0] ,"critical_level" =>dcriticallevel,"numrain"=>numrain,"numflood"=>numflood}}
-  # 		end				
- 	end
-
- 	
+	def marker_station
+		info =[]
+		count = Infomap.count
+		for i in 1..count
+			info[i] = Infomap.find(i)
+		end
+		format.json { render json: {"info"=> info}}
+	end
+	 	
 	def test
 		
 		# stg01 = Infomap.find(1).lonlat
