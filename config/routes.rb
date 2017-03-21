@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-	root 'infomaps#test'
+	root 'infomaps#index'
 
 	get 'infomaps/index' ,to: 'infomaps#index' , as: 'infomaps_index'
 	get 'infomaps/point',to:'infomaps#point',as:'infomaps_point'
@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 	get 'infomaps/draw' ,to: 'infomaps#draw' , as: 'infomaps_draw'
 	get 'infomaps/test' ,to: 'infomaps#test' , as: 'infomaps_test'
 	get 'infomaps/testcontrol',to: 'infomaps#testcontrol', as: 'infomaps_testcontrol'
+	get 'infomaps/control',to: 'infomaps#control', as: 'infomaps_control'
 
 	get 'storages/getjson',to: 'storages#getjson', as: 'storages_getjson'
+
 end

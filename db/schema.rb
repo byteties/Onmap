@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170106065443) do
+ActiveRecord::Schema.define(version: 20170321075839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20170106065443) do
     t.geography "area",          limit: {:srid=>4326, :type=>"polygon", :geographic=>true}
     t.datetime  "created_at",                                                               null: false
     t.datetime  "updated_at",                                                               null: false
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string    "name"
+    t.string    "type"
+    t.geography "lonlat",     limit: {:srid=>4326, :type=>"point", :geographic=>true}
+    t.integer   "infomap_id"
+    t.datetime  "created_at",                                                          null: false
+    t.datetime  "updated_at",                                                          null: false
   end
 
   create_table "storages", force: :cascade do |t|

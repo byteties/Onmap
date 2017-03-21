@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="demoapp">
+<html ng-app="crfloodweb">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
     <!-- Highchart-->
@@ -19,46 +18,278 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-   
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+  
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
-    </head>
-    <body>
-    <div id="map" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
+
 
     <script>
-        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib }),
-                map = new L.Map('map', { center: new L.LatLng(51.505, -0.04), zoom: 13 }),
-                drawnItems = L.featureGroup().addTo(map);
-        L.control.layers({
-            'osm': osm.addTo(map),
-            "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                attribution: 'google'
-            })
-        }, { 'drawlayer': drawnItems }, { position: 'topleft', collapsed: false }).addTo(map);
-        map.addControl(new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems,
-                poly: {
-                    allowIntersection: false
-                }
-            },
-            draw: {
-                polygon: {
-                    allowIntersection: false,
-                    showArea: true
-                }
-            }
-        }));
+        var getJson = setInterval(myTimer, 3600000);
 
-        map.on(L.Draw.Event.CREATED, function (event) {
-            var layer = event.layer;
-
-            drawnItems.addLayer(layer);
-        });
-
+        function myTimer() {
+            $.ajax({
+            type: "GET",
+            url: 'storages/getjson'})
+            .done(function(data){ 
+              console.log("Get Url Json Success")
+            })           
+                .error(function(jqXHR, textStatus, errorThrown) {
+                  alert("Error=" + errorThrown);
+                });
+          }
     </script>
-    </body>
+    <script>
+        var app = angular.module("crfloodweb", ['leaflet-directive']);
+        app.controller("MapController", [ "$scope", "leafletData", function($scope, leafletData) {  
+
+           $scope.controls = {
+                        draw: {}
+                    };
+          $scope.layers = {
+                    baselayers: {
+                        osm: {
+                            name: 'OpenStreetMap',
+                            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            type: 'xyz'
+                        },
+                        mapbox_street: {
+                            name: 'Mapbox Streets',
+                            url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
+                            type: 'xyz',
+                            layerOptions: {
+                                apikey: 'pk.eyJ1IjoiYmlnYnl0ZSIsImEiOiJjaXM5ejEzMzkwMDZiMm9vZjNhbWZhejYwIn0.GKqsUdM5SNhJ_JelmqAOGQ',
+                                mapid: 'mapbox.streets'
+                            }
+                        },
+                        mapbox_light:{
+                          name: 'Mapbox Light',
+                          url:  'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
+                            type: 'xyz',
+                            layerOptions: {
+                                apikey: 'pk.eyJ1IjoiYmlnYnl0ZSIsImEiOiJjaXM5ejEzMzkwMDZiMm9vZjNhbWZhejYwIn0.GKqsUdM5SNhJ_JelmqAOGQ',
+                                mapid: 'mapbox.light'
+                            }
+                        }                                           
+                    },                    
+                    overlays:{
+                           station: {
+                            name: 'CRflood Station',
+                            type: 'group',
+                            visible: true                            
+                          },
+                          draw: {
+                            name: 'draw',
+                            type: 'group',
+                            visible: true,
+                            layerParams: {
+                                showOnSelector: false
+                            }
+                          }                   
+                    }  
+          };
+
+          $scope.markers = {
+                    station: {
+                        tg03: {
+                            lat: 19.54796,
+                            lng: 99.47359,
+                            message: "TG03"
+                        },
+                        tg04: {
+                            lat: 19.62297,
+                            lng: 99.47661,
+                            message: "TG04"
+                        }
+
+                    }
+                  
+          };
+
+          $scope.center = {
+                lat: 19.9088,
+                lng: 99.83414,
+                zoom: 12
+          };
+
+          $scope.$on("leafletDirectiveMap.click", function(event, args)
+          {
+
+            // console.log($scope.startDate);
+
+            var e = args.leafletEvent;
+            var lat = e.latlng.lat.toString();
+            var lng = e.latlng.lng.toString();
+            var data = { 
+              "lat":lat,
+              "lng":lng,
+              "startDate":$scope.startDate,
+              "finalDate":$scope.finalDate
+            };            
+            // console.log(data);
+            $.ajax({
+            method : "GET",
+            url : "infomaps/point",
+            data : data
+            }).then(function mySucces(response) {
+                $scope.jsonData = angular.fromJson(response);
+                console.log($scope.jsonData);
+                
+                if($scope.jsonData != undefined){
+                  if($scope.jsonData.flooddata.temperatare == null){
+                    var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
+                   
+                  } 
+                  else{
+                    var numTemperatare = $scope.jsonData.flooddata.temperatare;
+                    
+                  }
+                  if($scope.jsonData.maxlevel != null){              
+                    $scope.markers = [{
+                      lat: $scope.jsonData.lat*1,
+                      lng: $scope.jsonData.lng*1,
+                      focus: false,
+                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"<br>อุณหภูมิ:"+numTemperatare+"<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood,
+                      icon: null
+                    }];
+                    
+                    var xCategories =[];
+                    var yWaterLevel =[];
+                    var yTemperatara =[];
+
+                    for(var i=0; i<$scope.jsonData.fullData.length ;i++){
+                      xCategories[i] = $scope.jsonData.fullData[i].time;
+                      yWaterLevel[i] = $scope.jsonData.fullData[i].water_level;
+                      yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
+                    };
+                     Highcharts.chart('mychart', {
+                        title: {
+                            text: $scope.jsonData.flooddata.name_station
+                        },
+
+                        xAxis: {
+                            categories: xCategories
+                        },
+
+                        series: [{
+                            name: 'ระดับน้ำ',
+                            data: yWaterLevel
+                        },{
+                            name: 'อุณหภูมิ',
+                            data: yTemperatara
+                        }]
+                      
+                    });
+                  }
+                  else{
+                      $scope.markers = [{
+                      lat: $scope.jsonData.lat*1,
+                      lng: $scope.jsonData.lng*1,
+                      focus: false,
+                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"<br>อุณหภูมิ:"+numTemperatare
+                    }];
+                  }         
+                }
+                else{               
+                  alert("บริเวณนี้ไม่มีข้อมูล");
+                }
+                
+            }, function myError(response) {
+                $scope.myWelcome = response.statusText;
+            });          
+          });
+
+
+        leafletData.getMap().then(function(map) {
+               leafletData.getLayers().then(function(baselayers) {
+                  var drawnItems = baselayers.overlays.draw;
+                  map.on('draw:created', function (e) {
+                    var layer = e.layer;
+                    drawnItems.addLayer(layer);
+                    console.log(JSON.stringify(layer.toGeoJSON()));
+
+                    if(layer.toGeoJSON().geometry.type == "Polygon"){
+                      var data = {
+                        "type":layer.toGeoJSON().geometry.type,
+                        "x1":layer.toGeoJSON().geometry.coordinates[0][0][0],
+                        "y1":layer.toGeoJSON().geometry.coordinates[0][0][1],
+                        "x2":layer.toGeoJSON().geometry.coordinates[0][1][0],
+                        "y2":layer.toGeoJSON().geometry.coordinates[0][1][1],
+                        "x3":layer.toGeoJSON().geometry.coordinates[0][2][0],
+                        "y3":layer.toGeoJSON().geometry.coordinates[0][2][1],
+                        "x4":layer.toGeoJSON().geometry.coordinates[0][3][0],
+                        "y4":layer.toGeoJSON().geometry.coordinates[0][3][1],
+                        "x5":layer.toGeoJSON().geometry.coordinates[0][4][0],
+                        "y5":layer.toGeoJSON().geometry.coordinates[0][4][1]
+                      }
+                    }
+                    else{
+                      var data ={
+                        "type":layer.toGeoJSON().geometry.type,
+                        "x1":layer.toGeoJSON().geometry.coordinates[0],
+                        "y1":layer.toGeoJSON().geometry.coordinates[1],
+                        "radius":layer
+                      }
+                    }
+                    
+                    console.log(layer.toGeoJSON());
+                    console.log(data);
+                    $.ajax({
+                      method : "GET",
+                      url : "infomaps/control",
+                      data : data
+                      }).then(function mySucces(response) {
+                          $scope.jsonData = angular.fromJson(response);
+                          console.log($scope.jsonData);
+                      }, function myError(response) {
+                          $scope.myWelcome = response.statusText;
+                    });    
+                  });
+               });
+           });        
+       
+      }]);
+         
+    </script>
+  </head>
+  <body ng-controller="MapController">
+  <div class="container">
+    <div class="row">
+      <nav class="navbar navbar-inverse">
+          <div class="col-md-12 col-md-offset-2">
+          <div class="col-md-12">
+            <h4 style="color:white">Web Application for Query and Analyze Spatial - Temporal Flood Data in Chiang Rai</h4>
+          </div>
+          <div class="col-md-12">
+            <h4 style="color:white">เว็บแอพพลิเคชั่นเพื่อสืบค้นและวิเคราะห์ข้อมูลน้ำท่วมเชิงพื้นที่และเชิงเวลาของจังหวัดเชียงราย</h4>
+          </div>
+          </div>
+      </nav>
+      <div class="row">
+        <div class="col-md-12 col-md-offset-2">
+          <span>เลือกช่วงเวลาที่ต้องการค้นหาข้อมูลระหว่างวันที่</span>
+          <input type="date" class="btn btn-primary" name="startDate" ng-model="startDate">
+          <span>และ</span>
+           <input type="date" class="btn btn-primary" name="finalDate" ng-model="finalDate">
+        </div>       
+      </div>
+    </div>
+    <div class="row">     
+      <div class="col-md-12">
+        <div style="width: 100%; height: 550px; margin: 0px ;">
+        <br>
+          <leaflet lf-center="center" 
+                    style="width:100%; height:100%;"
+                    markers="markers"
+                    markers-nested="true"                    
+                    layers="layers" 
+                    controls="controls">                      
+          </leaflet>
+        </div>    
+      </div>
+    </div>
+    <div class="row">                   
+        <div id="mychart"></div>
+    </div>     
+  </div>
+  </body>
 </html>
