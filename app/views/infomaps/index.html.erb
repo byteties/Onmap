@@ -884,20 +884,20 @@
                           console.log(jsonData.object[0]);
                           console.log(jsonData.object.length);
 
-                          for(j = 0; j <jsonData.object.length; j++){
+                          $scope.markers = {
+                            area: []
+                          };
+
+                          for(i =0 ; i<jsonData.object.length; i++){
+                            $scope.markers.area[i] ={
+                                  lat: jsonData.object[i][0]*1,
+                                  lng: jsonData.object[i][1]*1,
+                                  focus: true,
+                                  message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare
+                                };
                             
                           }
 
-                          for(i =0 ; i<jsonData.object.length; i++){
-                            $scope.markers[i] ={
-                              area:{
-                                lat: jsonData.object[i][0]*1,
-                                lng: jsonData.object[i][1]*1,
-                                focus: true,
-                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare
-                              }
-                            };
-                          }
                       }, function myError(response) {
                           $scope.myWelcome = response.statusText;
                     });    
