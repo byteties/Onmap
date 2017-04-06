@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="demoapp">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
     <!-- Highchart-->
@@ -22,71 +19,53 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
-    <script>
+
+     <script>
         var app = angular.module("demoapp", ["leaflet-directive"]);
-        app.controller("ControlsDrawController", [ "$scope", "leafletData", function($scope, leafletData) {
+        app.controller('MarkersAddRemoveController', [ '$scope', function($scope) {
             angular.extend($scope, {
                 london: {
                     lat: 51.505,
                     lng: -0.09,
-                    zoom: 4
+                    zoom: 8
                 },
-                controls: {
-                    draw: {}
-                },
-                layers: {
-                    baselayers: {
-                        mapbox_light: {
-                            name: 'Mapbox Light',
-                            url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
-                            type: 'xyz',
-                            layerOptions: {
-                                apikey: 'pk.eyJ1IjoiYmlnYnl0ZSIsImEiOiJjaXM5ejEzMzkwMDZiMm9vZjNhbWZhejYwIn0.GKqsUdM5SNhJ_JelmqAOGQ',
-                                mapid: 'mapbox.streets'
-                            },
-                            layerParams: {
-                                showOnSelector: false
-                            }
-                        }
-                    },
-                    overlays: {
-                        draw: {
-                            name: 'draw',
-                            type: 'group',
-                            visible: true,
-                            layerParams: {
-                                showOnSelector: false
-                            }
+                markers: {}
+            });
+
+            $scope.addMarkers = function() {
+                angular.extend($scope, {
+                    markers: {
+                        m1: {
+                            lat: 51.505,
+                            lng: -0.09,
+                            message: "I'm a static marker",
+                        },
+                        m2: {
+                            lat: 51,
+                            lng: 0,
+                            focus: true,
+                            message: "Hey, drag me if you want",
+                            draggable: true
                         }
                     }
-                }
-           });
+                });
+            };
 
-           leafletData.getMap().then(function(map) {
-               leafletData.getLayers().then(function(baselayers) {
-                  var drawnItems = baselayers.overlays.draw;
-                  map.on('draw:created', function (e) {
-                    var layer = e.layer;
-                    drawnItems.addLayer(layer);
-                    console.log(JSON.stringify(layer.toGeoJSON()));
-                  });
-               });
-           });
-       }]);
+            $scope.removeMarkers = function() {
+                $scope.markers = {};
+            }
+
+            $scope.addMarkers();
+        } ]);
     </script>
-    <style>
-        input {
-            width: 120px;
-            margin-right: 10px;
-        }
-    </style>
-    </head>
-    <body ng-controller="ControlsDrawController">
-    <leaflet lf-center="london" controls="controls" layers="layers" width="100%" height="400"></leaflet>
-    <h1>Draw control example</h1>
-    <p>Draw a shape and a geoJSON data structure will be shown on the console.log.</p>
+  </head>
+ <body ng-controller="MarkersAddRemoveController">
+      <leaflet lf-center="london" markers="markers" height="480px" width="100%"></leaflet>
+      <h1>Add/remove markers easily example</h1>
+      <button ng-click="removeMarkers()">Remove markers</button>
+      <button ng-click="addMarkers()">Add markers</button>
   </body>
 </html>

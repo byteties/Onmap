@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'bower-rails'
 gem 'angularjs-rails'
 gem 'angular-leaflet-rails'
+gem 'angular-leaflet-rails-too'
+
 gem 'rego'
 gem 'activerecord-postgis-adapter'
 gem 'bootstrap-sass'

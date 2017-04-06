@@ -1,6 +1,35 @@
 class InfomapsController < ApplicationController
 	def index
-		
+		array =[]
+		data = []
+		count = Infomap.count
+		for i in 1..count
+			station = Infomap.find(i)
+			flood = Storage.where(infomap_id: station.id).last
+			# name station,rain,temperatare,water_level,critical_level,checkflood,checkrain
+			if(flood.rain == nil)
+				rain_state = 'ไม่สามารถอ่านค่าการเกิดฝนได้'
+			elsif (flood.rain == 0)
+				rain_state = 'ปกติ'
+			else
+				rain_state = 'กำลังเกิดฝน'
+			end
+
+			if(flood.temperatare == nil)
+				temperatare_state = 'ไม่สามารถอ่านค่าอุณหภูมิได้'
+			else
+				temperatare_state = "#{flood.temperatare}"+"°C"
+			end
+
+			if(flood.checkflood == 1)
+				flood_state = "กำลังเกิดน้ำท่วม"
+			else
+				flood_state = "ปกติ"
+			end
+			array = [station.name_station,temperatare_state,flood.water_level,flood.critical_level,rain_state,flood_state]
+			data << array
+		end
+		@data = data
 	end
 
 	def point		
@@ -34,28 +63,28 @@ class InfomapsController < ApplicationController
 	end			
 	
 	def circle
-		lng = params[:lng][0..8]
-		lat = params[:lat][0..8]
-		radius = params[:radius]
-		point = 'POINT('+lng+' '+lat+')'
-		count = Infomap.count
-		x.each do |data|
-			@checkincircle = Infomap.find_by_sql("SELECT name_station FROM infomaps
-			WHERE ST_Within(
-				ST_GeometryFromText('#{data.lonlat}'),
-				ST_GeometryFromText('#{locat}'),
-				5)")			
-		end
-		respond_to infomaps_index
+		# lng = params[:lng][0..8]
+		# lat = params[:lat][0..8]
+		# radius = params[:radius]
+		# point = 'POINT('+lng+' '+lat+')'
+		# count = Infomap.count
+		# x.each do |data|
+		# 	@checkincircle = Infomap.find_by_sql("SELECT name_station FROM infomaps
+		# 	WHERE ST_Within(
+		# 		ST_GeometryFromText('#{data.lonlat}'),
+		# 		ST_GeometryFromText('#{locat}'),
+		# 		5)")			
+		# end
+		# respond_to infomaps_index
 	end 	
 
 	def marker_station
-		info =[]
-		count = Infomap.count
-		for i in 1..count
-			info[i] = Infomap.find(i)
-		end
-		format.json { render json: {"info"=> info}}
+		# info =[]
+		# count = Infomap.count
+		# for i in 1..count
+		# 	info[i] = Infomap.find(i)
+		# end
+		# format.json { render json: {"info"=> info}}
 	end
 
 	def testcontrol
@@ -63,61 +92,61 @@ class InfomapsController < ApplicationController
 	end
 
 	def control
-		type = params[:type]
-		startDate = params[:startDate]
-		finalDate = params[:finalDate]
+		# type = params[:type]
+		# startDate = params[:startDate]
+		# finalDate = params[:finalDate]
 
-		if(type == "Point")
-		# 	test = coordinates
-		# 	format.json {render json: {"test"=>test}}
-		elsif (type == "Polygon")
-			x1 = params[:x1]
-			y1 = params[:y1]
+		# if(type == "Point")
+		# # 	test = coordinates
+		# # 	format.json {render json: {"test"=>test}}
+		# elsif (type == "Polygon")
+		# 	x1 = params[:x1]
+		# 	y1 = params[:y1]
 
-			x2 = params[:x2]
-			y2 = params[:y2]
+		# 	x2 = params[:x2]
+		# 	y2 = params[:y2]
 
-			x3 = params[:x3]
-			y3 = params[:y3]
+		# 	x3 = params[:x3]
+		# 	y3 = params[:y3]
 
-			x4 = params[:x4]
-			y4 = params[:y4]
+		# 	x4 = params[:x4]
+		# 	y4 = params[:y4]
 
-			x5 = params[:x5]
-			y5 = params[:y5]
+		# 	x5 = params[:x5]
+		# 	y5 = params[:y5]
 
-			polygon = 'POLYGON(('+x1+' '+y1+','+x2+' '+y2+','+x3+' '+y3+','+x4+' '+y4+','+x5+' '+y5+'))'
-			object = []
-			array = []
-			count = Infomap.count
-			for i in 1..count
-				data = Infomap.find(i)
-				checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{data.lonlat}'),ST_GeomFromText('#{polygon}'))")
-				if(checkinpolygon != [])
-					if(startDate != nil || finalDate != nil)
-	    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").maximum(:water_level)
-	    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").minimum(:water_level)
-						avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").average(:water_level).to_f
-						sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkflood)				
-						sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkrain)	
-						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}")							
-					end		
-					flooddata = Storage.where(infomap_id: data.id).last
-					lng = data.lonlat.x
-					lat = data.lonlat.y
-					if(startDate != nil || finalDate != nil)
-  						array =[lat,lng,flooddata,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
-  					else
-  						array =[lat,lng,flooddata]
-  					end
-  					object << array
-				end
-			end
-			respond_to do |format|  
-			    format.json { render json: {"object"=>object}, status: :ok}
-			    format.html 		    
-			end 
-		end
+		# 	polygon = 'POLYGON(('+x1+' '+y1+','+x2+' '+y2+','+x3+' '+y3+','+x4+' '+y4+','+x5+' '+y5+'))'
+		# 	object = []
+		# 	array = []
+		# 	count = Infomap.count
+		# 	for i in 1..count
+		# 		data = Infomap.find(i)
+		# 		checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{data.lonlat}'),ST_GeomFromText('#{polygon}'))")
+		# 		if(checkinpolygon != [])
+		# 			if(startDate != nil || finalDate != nil)
+	 #    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").maximum(:water_level)
+	 #    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").minimum(:water_level)
+		# 				avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").average(:water_level).to_f
+		# 				sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkflood)				
+		# 				sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkrain)	
+		# 				fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}")							
+		# 			end		
+		# 			flooddata = Storage.where(infomap_id: data.id).last
+		# 			lng = data.lonlat.x
+		# 			lat = data.lonlat.y
+		# 			if(startDate != nil || finalDate != nil)
+  # 						array =[lat,lng,flooddata,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
+  # 					else
+  # 						array =[lat,lng,flooddata]
+  # 					end
+  # 					object << array
+		# 		end
+		# 	end
+		# 	respond_to do |format|  
+		# 	    format.json { render json: {"object"=>object}, status: :ok}
+		# 	    format.html 		    
+		# 	end 
+		# end
 
 	end
 

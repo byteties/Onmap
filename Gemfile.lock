@@ -44,6 +44,9 @@ GEM
     angular-leaflet-rails (0.1.0.6)
       angularjs-rails
       leaflet-rails
+    angular-leaflet-rails-too (0.1.0.10)
+      angularjs-rails
+      leaflet-rails
     angularjs-rails (1.6.1)
     arel (7.1.2)
     arrayfields (4.9.2)
@@ -187,6 +190,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   angular-leaflet-rails
+  angular-leaflet-rails-too
   angularjs-rails
   bootstrap-sass
   bower-rails

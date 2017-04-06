@@ -9,7 +9,11 @@ Rails.application.routes.draw do
 	get 'infomaps/test' ,to: 'infomaps#test' , as: 'infomaps_test'
 	get 'infomaps/testcontrol',to: 'infomaps#testcontrol', as: 'infomaps_testcontrol'
 	get 'infomaps/control',to: 'infomaps#control', as: 'infomaps_control'
+	get 'infomaps/testmap' ,to: 'infomaps#testmap' , as: 'infomaps_testmap'
+
 
 	get 'storages/getjson',to: 'storages#getjson', as: 'storages_getjson'
 
+	get 'places/index',to: 'places#index', as: 'places_index'
+	get 'places/findplace',to: 'places#findplace', as: 'places_findplace'
 end

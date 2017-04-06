@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170321075839) do
+ActiveRecord::Schema.define(version: 20170404081036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,22 +29,22 @@ ActiveRecord::Schema.define(version: 20170321075839) do
   end
 
   create_table "places", force: :cascade do |t|
-    t.string    "name"
-    t.string    "type"
-    t.geography "lonlat",     limit: {:srid=>4326, :type=>"point", :geographic=>true}
-    t.integer   "infomap_id"
-    t.datetime  "created_at",                                                          null: false
-    t.datetime  "updated_at",                                                          null: false
+    t.string    "place_name"
+    t.string    "place_type"
+    t.geography "place_lonlat",     limit: {:srid=>4326, :type=>"point", :geographic=>true}
+    t.integer   "place_infomap_id"
+    t.datetime  "created_at",                                                                null: false
+    t.datetime  "updated_at",                                                                null: false
   end
 
   create_table "storages", force: :cascade do |t|
     t.integer  "infomap_id"
     t.string   "name_station"
     t.integer  "rain"
-    t.integer  "temperatare"
-    t.integer  "water_level"
-    t.integer  "warning_level"
-    t.integer  "critical_level"
+    t.float    "temperatare"
+    t.float    "water_level"
+    t.float    "warning_level"
+    t.float    "critical_level"
     t.integer  "checkflood"
     t.integer  "checkrain"
     t.string   "time"

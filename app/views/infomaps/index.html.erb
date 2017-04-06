@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="crfloodweb">
   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script> -->
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
     <!-- Highchart-->
@@ -22,7 +22,6 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
-
     <script>
         var getJson = setInterval(myTimer, 3600000);
 
@@ -39,13 +38,225 @@
           }
     </script>
     <script>
-        var app = angular.module("crfloodweb", ['leaflet-directive']);
-        app.controller("MapController", [ "$scope", "leafletData", function($scope, leafletData) {  
+        var image_path = '<%= asset_path 'station-marker.png' %>'
 
-           $scope.controls = {
-                        draw: {}
-                    };
-          $scope.layers = {
+        var app = angular.module("crfloodweb", ["leaflet-directive"]);
+        app.controller("MapController", [ "$scope", "leafletData", function($scope,leafletData) {
+          
+            $scope.icon = {
+              "iconUrl": image_path,
+              "iconSize": [25, 25]
+            };
+
+            $scope.center = {
+                  lat: 19.9088,
+                  lng: 99.83414,
+                  zoom: 10
+            };
+
+            $scope.controls = {
+                draw: {}
+            };
+
+            $scope.markers = {
+                  station: {
+                        TG03: {
+                            lat: 19.54796,
+                            lng: 99.47359,
+                            focus: true,
+                            message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG04: {
+                            lat: 19.62297,
+                            lng: 99.47661,
+                             message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG05: {
+                            lat: 19.65264,
+                            lng: 99.53839,
+                            message: "สถานี : <%= @data[2][0]%><br>"+"อุณหภูมิ : <%= @data[2][1]%><br>"+"ระดับน้ำ : <%= @data[2][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[2][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[2][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[2][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG06: {
+                            lat: 19.84342,
+                            lng: 99.81328,
+                             message: "สถานี : <%= @data[3][0]%><br>"+"อุณหภูมิ : <%= @data[3][1]%><br>"+"ระดับน้ำ : <%= @data[3][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[3][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[3][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[3][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG11: {
+                            lat: 19.93539,
+                            lng: 99.77031,
+                             message: "สถานี : <%= @data[4][0]%><br>"+"อุณหภูมิ : <%= @data[4][1]%><br>"+"ระดับน้ำ : <%= @data[4][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[4][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[4][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[4][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG12: {
+                            lat: 19.84597,
+                            lng: 99.72928,
+                             message: "สถานี : <%= @data[5][0]%><br>"+"อุณหภูมิ : <%= @data[5][1]%><br>"+"ระดับน้ำ : <%= @data[5][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[5][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[5][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[5][5]%>",
+                            icon: $scope.icon
+                        },
+                        TG13: {
+                            lat: 19.95689,
+                            lng: 99.93733,
+                            message: "สถานี : <%= @data[6][0]%><br>"+"อุณหภูมิ : <%= @data[6][1]%><br>"+"ระดับน้ำ : <%= @data[6][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[6][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[6][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[6][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI01: {
+                            lat: 19.571936,
+                            lng: 99.6955448,
+                             message: "สถานี : <%= @data[7][0]%><br>"+"อุณหภูมิ : <%= @data[7][1]%><br>"+"ระดับน้ำ : <%= @data[7][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[7][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[7][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[7][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI02: {
+                            lat: 19.5516542,
+                            lng: 99.7383277,
+                             message: "สถานี : <%= @data[8][0]%><br>"+"อุณหภูมิ : <%= @data[8][1]%><br>"+"ระดับน้ำ : <%= @data[8][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[8][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[8][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[8][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI03: {
+                            lat: 19.9161853,
+                            lng: 100.1120427,
+                             message: "สถานี : <%= @data[9][0]%><br>"+"อุณหภูมิ : <%= @data[9][1]%><br>"+"ระดับน้ำ : <%= @data[9][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[9][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[9][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[9][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI04: {
+                            lat: 19.890765,
+                            lng: 100.1068252,
+                             message: "สถานี : <%= @data[10][0]%><br>"+"อุณหภูมิ : <%= @data[10][1]%><br>"+"ระดับน้ำ : <%= @data[10][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[10][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[10][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[10][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI05: {
+                            lat: 19.851362,
+                            lng: 100.139572,
+                             message: "สถานี : <%= @data[11][0]%><br>"+"อุณหภูมิ : <%= @data[11][1]%><br>"+"ระดับน้ำ : <%= @data[11][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[11][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[11][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[11][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI06: {
+                            lat: 19.8332308,
+                            lng: 100.2006674,
+                             message: "สถานี : <%= @data[12][0]%><br>"+"อุณหภูมิ : <%= @data[12][1]%><br>"+"ระดับน้ำ : <%= @data[12][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[12][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[12][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[12][5]%>",
+                            icon: $scope.icon
+                        },
+                        STI07: {
+                            lat: 19.80281,
+                            lng: 100.35498,
+                             message: "สถานี : <%= @data[13][0]%><br>"+"อุณหภูมิ : <%= @data[13][1]%><br>"+"ระดับน้ำ : <%= @data[13][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[13][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[13][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[13][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK01: {
+                            lat: 20.230147,
+                            lng: 99.80813,
+                             message: "สถานี : <%= @data[14][0]%><br>"+"อุณหภูมิ : <%= @data[14][1]%><br>"+"ระดับน้ำ : <%= @data[14][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[14][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[14][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[14][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK02: {
+                            lat: 20.218308,
+                            lng: 99.856936,
+                            message: "สถานี : <%= @data[15][0]%><br>"+"อุณหภูมิ : <%= @data[15][1]%><br>"+"ระดับน้ำ : <%= @data[15][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[15][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[15][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[15][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK03: {
+                            lat: 20.237627,
+                            lng: 99.904507,
+                             message: "สถานี : <%= @data[16][0]%><br>"+"อุณหภูมิ : <%= @data[16][1]%><br>"+"ระดับน้ำ : <%= @data[16][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[16][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[16][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[16][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK04: {
+                            lat: 20.2886,
+                            lng: 99.945143,
+                             message: "สถานี : <%= @data[17][0]%><br>"+"อุณหภูมิ : <%= @data[17][1]%><br>"+"ระดับน้ำ : <%= @data[17][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[17][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[17][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[17][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK05: {
+                            lat: 20.305488,
+                            lng: 99.991068,
+                             message: "สถานี : <%= @data[18][0]%><br>"+"อุณหภูมิ : <%= @data[18][1]%><br>"+"ระดับน้ำ : <%= @data[18][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[18][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[18][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[18][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK06: {
+                            lat: 20.106808,
+                            lng: 99.765371,
+                             message: "สถานี : <%= @data[19][0]%><br>"+"อุณหภูมิ : <%= @data[19][1]%><br>"+"ระดับน้ำ : <%= @data[19][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[19][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[19][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[19][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK07: {
+                            lat: 20.13028,
+                            lng: 99.834078,
+                            message: "สถานี : <%= @data[20][0]%><br>"+"อุณหภูมิ : <%= @data[20][1]%><br>"+"ระดับน้ำ : <%= @data[20][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[20][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[20][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[20][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK10: {
+                            lat: 20.1050282,
+                            lng: 100.1626526,
+                             message: "สถานี : <%= @data[21][0]%><br>"+"อุณหภูมิ : <%= @data[21][1]%><br>"+"ระดับน้ำ : <%= @data[21][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[21][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[21][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[21][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK11: {
+                            lat: 20.10619,
+                            lng: 100.07917,
+                             message: "สถานี : <%= @data[22][0]%><br>"+"อุณหภูมิ : <%= @data[22][1]%><br>"+"ระดับน้ำ : <%= @data[22][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[22][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[22][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[22][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK12: {
+                            lat: 20.1578185,
+                            lng: 100.1153587,
+                             message: "สถานี : <%= @data[23][0]%><br>"+"อุณหภูมิ : <%= @data[23][1]%><br>"+"ระดับน้ำ : <%= @data[23][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[23][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[23][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[23][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK13: {
+                            lat: 19.94148,
+                            lng: 100.433045,
+                             message: "สถานี : <%= @data[24][0]%><br>"+"อุณหภูมิ : <%= @data[24][1]%><br>"+"ระดับน้ำ : <%= @data[24][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[24][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[24][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[24][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK14: {
+                            lat: 20.030556,
+                            lng: 100.4893855,
+                             message: "สถานี : <%= @data[25][0]%><br>"+"อุณหภูมิ : <%= @data[25][1]%><br>"+"ระดับน้ำ : <%= @data[25][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[25][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[25][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[25][5]%>",
+                            icon: $scope.icon
+                        },
+                        STK15: {
+                            lat: 20.1042843,
+                            lng: 100.5092146,
+                            message: "สถานี : <%= @data[26][0]%><br>"+"อุณหภูมิ : <%= @data[26][1]%><br>"+"ระดับน้ำ : <%= @data[26][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[26][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[26][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[26][5]%>",
+                            icon: $scope.icon
+                        },
+                        STG01: {
+                            lat: 20.0489686,
+                            lng: 100.0993328,
+                             message: "สถานี : <%= @data[27][0]%><br>"+"อุณหภูมิ : <%= @data[27][1]%><br>"+"ระดับน้ำ : <%= @data[27][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[27][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[27][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[27][5]%>",
+                            icon: $scope.icon
+                        },
+                        STG02: {
+                            lat: 20.00916,
+                            lng: 100.04044,
+                             message: "สถานี : <%= @data[28][0]%><br>"+"อุณหภูมิ : <%= @data[28][1]%><br>"+"ระดับน้ำ : <%= @data[28][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[28][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[28][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[28][5]%>",
+                            icon: $scope.icon
+                        },
+                        STG03: {
+                            lat: 20.0071493,
+                            lng: 100.0268035,
+                             message: "สถานี : <%= @data[29][0]%><br>"+"อุณหภูมิ : <%= @data[29][1]%><br>"+"ระดับน้ำ : <%= @data[29][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[29][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[29][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[29][5]%>",
+                            icon: $scope.icon
+                        },
+                        STG05: {
+                            lat: 20.0290401,
+                            lng: 99.8462132,
+                            message: "สถานี : <%= @data[30][0]%><br>"+"อุณหภูมิ : <%= @data[30][1]%><br>"+"ระดับน้ำ : <%= @data[30][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[30][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[30][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[30][5]%>",
+                            icon: $scope.icon
+                        },
+                        STG06: {
+                            lat: 19.977445,
+                            lng: 99.833814,
+                             message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
+                            icon: $scope.icon
+                        }
+                    }
+            };
+
+            $scope.layers = {
                     baselayers: {
                         osm: {
                             name: 'OpenStreetMap',
@@ -84,122 +295,552 @@
                             layerParams: {
                                 showOnSelector: false
                             }
-                          }                   
+                          },
+                          point: {
+                            name: 'Clicked Point',
+                            type: 'group',
+                            visible: true
+                          },
+                          area: {
+                            name: 'Area',
+                            type: 'group',
+                            visible: true
+                          }
                     }  
-          };
+            };
+            
+            $scope.$on("leafletDirectiveMap.click", function(event, args){
+                var e = args.leafletEvent;
+                var lat = e.latlng.lat.toString();
+                var lng = e.latlng.lng.toString();
+                if($scope.startDate != undefined || $scope.finishDate != undefined){
+                  var s_day = $scope.startDate.getDate();
+                  var s_month = $scope.startDate.getMonth()+1;
+                  var s_year = $scope.startDate.getFullYear();
 
-          $scope.markers = {
-                    station: {
-                        tg03: {
-                            lat: 19.54796,
-                            lng: 99.47359,
-                            message: "TG03"
-                        },
-                        tg04: {
-                            lat: 19.62297,
-                            lng: 99.47661,
-                            message: "TG04"
-                        }
+                  var f_day = $scope.finalDate.getDate();
+                  var f_month = $scope.finalDate.getMonth()+1;
+                  var f_year = $scope.finalDate.getFullYear();
 
+
+                  if(s_day<10){
+                    s_day = "0"+s_day;
+                  }
+                  if(s_month<10){
+                    s_month = "0"+s_month;
+                  }
+                  if(f_day<10){
+                    f_day = "0"+f_day;
+                  }
+                  if(f_month<10){
+                    f_month = "0"+f_month;
+                  }
+                  var begin = s_year+"-"+s_month+"-"+s_day;
+                  var finish = f_year+"-"+f_month+"-"+f_day;
+                }
+                else{
+                  var begin = null;
+                  var finish = null;
+                }
+                var data = { 
+                  "lat":lat,
+                  "lng":lng,
+                  "startDate":begin,
+                  "finalDate":finish
+                };
+                console.log(begin);
+                console.log(finish);
+                console.log(data);
+                $.ajax({
+                method : "GET",
+                url : "infomaps/point",
+                data : data
+                }).then(function mySucces(response) {
+                    $scope.jsonData = angular.fromJson(response);
+                    console.log($scope.jsonData);
+                    
+                    if($scope.jsonData != undefined){
+                      if($scope.jsonData.flooddata.temperatare == null){
+                        var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
+                       
+                      } 
+                      else{
+                        var numTemperatare = $scope.jsonData.flooddata.temperatare+"°C";
+                        
+                      }
+                      if($scope.jsonData.maxlevel != null){              
+                        $scope.markers = {
+                           station: {
+                              TG03: {
+                                  lat: 19.54796,
+                                  lng: 99.47359,
+                                  message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG04: {
+                                  lat: 19.62297,
+                                  lng: 99.47661,
+                                   message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG05: {
+                                  lat: 19.65264,
+                                  lng: 99.53839,
+                                  message: "สถานี : <%= @data[2][0]%><br>"+"อุณหภูมิ : <%= @data[2][1]%><br>"+"ระดับน้ำ : <%= @data[2][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[2][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[2][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[2][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG06: {
+                                  lat: 19.84342,
+                                  lng: 99.81328,
+                                   message: "สถานี : <%= @data[3][0]%><br>"+"อุณหภูมิ : <%= @data[3][1]%><br>"+"ระดับน้ำ : <%= @data[3][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[3][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[3][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[3][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG11: {
+                                  lat: 19.93539,
+                                  lng: 99.77031,
+                                   message: "สถานี : <%= @data[4][0]%><br>"+"อุณหภูมิ : <%= @data[4][1]%><br>"+"ระดับน้ำ : <%= @data[4][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[4][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[4][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[4][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG12: {
+                                  lat: 19.84597,
+                                  lng: 99.72928,
+                                   message: "สถานี : <%= @data[5][0]%><br>"+"อุณหภูมิ : <%= @data[5][1]%><br>"+"ระดับน้ำ : <%= @data[5][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[5][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[5][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[5][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG13: {
+                                  lat: 19.95689,
+                                  lng: 99.93733,
+                                  message: "สถานี : <%= @data[6][0]%><br>"+"อุณหภูมิ : <%= @data[6][1]%><br>"+"ระดับน้ำ : <%= @data[6][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[6][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[6][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[6][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI01: {
+                                  lat: 19.571936,
+                                  lng: 99.6955448,
+                                   message: "สถานี : <%= @data[7][0]%><br>"+"อุณหภูมิ : <%= @data[7][1]%><br>"+"ระดับน้ำ : <%= @data[7][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[7][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[7][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[7][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI02: {
+                                  lat: 19.5516542,
+                                  lng: 99.7383277,
+                                   message: "สถานี : <%= @data[8][0]%><br>"+"อุณหภูมิ : <%= @data[8][1]%><br>"+"ระดับน้ำ : <%= @data[8][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[8][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[8][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[8][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI03: {
+                                  lat: 19.9161853,
+                                  lng: 100.1120427,
+                                   message: "สถานี : <%= @data[9][0]%><br>"+"อุณหภูมิ : <%= @data[9][1]%><br>"+"ระดับน้ำ : <%= @data[9][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[9][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[9][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[9][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI04: {
+                                  lat: 19.890765,
+                                  lng: 100.1068252,
+                                   message: "สถานี : <%= @data[10][0]%><br>"+"อุณหภูมิ : <%= @data[10][1]%><br>"+"ระดับน้ำ : <%= @data[10][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[10][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[10][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[10][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI05: {
+                                  lat: 19.851362,
+                                  lng: 100.139572,
+                                   message: "สถานี : <%= @data[11][0]%><br>"+"อุณหภูมิ : <%= @data[11][1]%><br>"+"ระดับน้ำ : <%= @data[11][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[11][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[11][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[11][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI06: {
+                                  lat: 19.8332308,
+                                  lng: 100.2006674,
+                                   message: "สถานี : <%= @data[12][0]%><br>"+"อุณหภูมิ : <%= @data[12][1]%><br>"+"ระดับน้ำ : <%= @data[12][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[12][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[12][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[12][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI07: {
+                                  lat: 19.80281,
+                                  lng: 100.35498,
+                                   message: "สถานี : <%= @data[13][0]%><br>"+"อุณหภูมิ : <%= @data[13][1]%><br>"+"ระดับน้ำ : <%= @data[13][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[13][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[13][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[13][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK01: {
+                                  lat: 20.230147,
+                                  lng: 99.80813,
+                                   message: "สถานี : <%= @data[14][0]%><br>"+"อุณหภูมิ : <%= @data[14][1]%><br>"+"ระดับน้ำ : <%= @data[14][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[14][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[14][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[14][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK02: {
+                                  lat: 20.218308,
+                                  lng: 99.856936,
+                                  message: "สถานี : <%= @data[15][0]%><br>"+"อุณหภูมิ : <%= @data[15][1]%><br>"+"ระดับน้ำ : <%= @data[15][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[15][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[15][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[15][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK03: {
+                                  lat: 20.237627,
+                                  lng: 99.904507,
+                                   message: "สถานี : <%= @data[16][0]%><br>"+"อุณหภูมิ : <%= @data[16][1]%><br>"+"ระดับน้ำ : <%= @data[16][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[16][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[16][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[16][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK04: {
+                                  lat: 20.2886,
+                                  lng: 99.945143,
+                                   message: "สถานี : <%= @data[17][0]%><br>"+"อุณหภูมิ : <%= @data[17][1]%><br>"+"ระดับน้ำ : <%= @data[17][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[17][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[17][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[17][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK05: {
+                                  lat: 20.305488,
+                                  lng: 99.991068,
+                                   message: "สถานี : <%= @data[18][0]%><br>"+"อุณหภูมิ : <%= @data[18][1]%><br>"+"ระดับน้ำ : <%= @data[18][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[18][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[18][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[18][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK06: {
+                                  lat: 20.106808,
+                                  lng: 99.765371,
+                                   message: "สถานี : <%= @data[19][0]%><br>"+"อุณหภูมิ : <%= @data[19][1]%><br>"+"ระดับน้ำ : <%= @data[19][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[19][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[19][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[19][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK07: {
+                                  lat: 20.13028,
+                                  lng: 99.834078,
+                                  message: "สถานี : <%= @data[20][0]%><br>"+"อุณหภูมิ : <%= @data[20][1]%><br>"+"ระดับน้ำ : <%= @data[20][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[20][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[20][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[20][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK10: {
+                                  lat: 20.1050282,
+                                  lng: 100.1626526,
+                                   message: "สถานี : <%= @data[21][0]%><br>"+"อุณหภูมิ : <%= @data[21][1]%><br>"+"ระดับน้ำ : <%= @data[21][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[21][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[21][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[21][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK11: {
+                                  lat: 20.10619,
+                                  lng: 100.07917,
+                                   message: "สถานี : <%= @data[22][0]%><br>"+"อุณหภูมิ : <%= @data[22][1]%><br>"+"ระดับน้ำ : <%= @data[22][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[22][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[22][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[22][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK12: {
+                                  lat: 20.1578185,
+                                  lng: 100.1153587,
+                                   message: "สถานี : <%= @data[23][0]%><br>"+"อุณหภูมิ : <%= @data[23][1]%><br>"+"ระดับน้ำ : <%= @data[23][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[23][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[23][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[23][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK13: {
+                                  lat: 19.94148,
+                                  lng: 100.433045,
+                                   message: "สถานี : <%= @data[24][0]%><br>"+"อุณหภูมิ : <%= @data[24][1]%><br>"+"ระดับน้ำ : <%= @data[24][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[24][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[24][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[24][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK14: {
+                                  lat: 20.030556,
+                                  lng: 100.4893855,
+                                   message: "สถานี : <%= @data[25][0]%><br>"+"อุณหภูมิ : <%= @data[25][1]%><br>"+"ระดับน้ำ : <%= @data[25][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[25][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[25][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[25][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK15: {
+                                  lat: 20.1042843,
+                                  lng: 100.5092146,
+                                  message: "สถานี : <%= @data[26][0]%><br>"+"อุณหภูมิ : <%= @data[26][1]%><br>"+"ระดับน้ำ : <%= @data[26][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[26][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[26][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[26][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG01: {
+                                  lat: 20.0489686,
+                                  lng: 100.0993328,
+                                   message: "สถานี : <%= @data[27][0]%><br>"+"อุณหภูมิ : <%= @data[27][1]%><br>"+"ระดับน้ำ : <%= @data[27][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[27][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[27][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[27][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG02: {
+                                  lat: 20.00916,
+                                  lng: 100.04044,
+                                   message: "สถานี : <%= @data[28][0]%><br>"+"อุณหภูมิ : <%= @data[28][1]%><br>"+"ระดับน้ำ : <%= @data[28][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[28][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[28][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[28][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG03: {
+                                  lat: 20.0071493,
+                                  lng: 100.0268035,
+                                   message: "สถานี : <%= @data[29][0]%><br>"+"อุณหภูมิ : <%= @data[29][1]%><br>"+"ระดับน้ำ : <%= @data[29][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[29][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[29][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[29][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG05: {
+                                  lat: 20.0290401,
+                                  lng: 99.8462132,
+                                  message: "สถานี : <%= @data[30][0]%><br>"+"อุณหภูมิ : <%= @data[30][1]%><br>"+"ระดับน้ำ : <%= @data[30][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[30][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[30][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[30][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG06: {
+                                  lat: 19.977445,
+                                  lng: 99.833814,
+                                   message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
+                                  icon: $scope.icon
+                              }
+                          },
+                          point:{
+                            p1:{
+                              lat: $scope.jsonData.lat*1,
+                              lng: $scope.jsonData.lng*1,
+                              focus: true,
+                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
+                            }
+                          }
+                        };                        
+                        
+                        var xCategories =[];
+                        var yWaterLevel =[];
+                        var yTemperatara =[];
+                        var yCritical = [];
+
+                        for(var i=0; i<$scope.jsonData.fullData.length ;i++){
+                          xCategories[i] = $scope.jsonData.fullData[i].time;
+                          yWaterLevel[i] = $scope.jsonData.fullData[i].water_level;
+                          yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
+                          yCritical[i] = $scope.jsonData.fullData[i].critical_level;
+                        };
+                         Highcharts.chart('mychart', {
+                            title: {
+                                text: $scope.jsonData.flooddata.name_station
+                            },
+                            subtitle: {
+                                text: 'อุณหภูมิ'
+                            },
+
+                            xAxis: {
+                                categories: xCategories
+                            },
+
+                            series: [{
+                                name: 'อุณหภูมิ',
+                                data: yTemperatara
+                            }]                      
+                        });
+                         Highcharts.chart('mychart2', {
+                            title: {
+                                text: $scope.jsonData.flooddata.name_station
+                            },
+                            subtitle: {
+                                text: 'ระดับน้ำ'
+                            },
+
+                            xAxis: {
+                                categories: xCategories
+                            },
+
+                            series: [{
+                                name: 'ระดับน้ำ',
+                                data: yWaterLevel
+                            },
+                            {
+                              name: 'ระดับวิกฤษ',
+                              data: yCritical
+                            }]                      
+                        });
+                      }
+                      else{
+                        $scope.markers = {
+                          station: {
+                              TG03: {
+                                  lat: 19.54796,
+                                  lng: 99.47359,
+                                  message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG04: {
+                                  lat: 19.62297,
+                                  lng: 99.47661,
+                                   message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG05: {
+                                  lat: 19.65264,
+                                  lng: 99.53839,
+                                  message: "สถานี : <%= @data[2][0]%><br>"+"อุณหภูมิ : <%= @data[2][1]%><br>"+"ระดับน้ำ : <%= @data[2][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[2][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[2][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[2][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG06: {
+                                  lat: 19.84342,
+                                  lng: 99.81328,
+                                   message: "สถานี : <%= @data[3][0]%><br>"+"อุณหภูมิ : <%= @data[3][1]%><br>"+"ระดับน้ำ : <%= @data[3][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[3][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[3][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[3][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG11: {
+                                  lat: 19.93539,
+                                  lng: 99.77031,
+                                   message: "สถานี : <%= @data[4][0]%><br>"+"อุณหภูมิ : <%= @data[4][1]%><br>"+"ระดับน้ำ : <%= @data[4][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[4][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[4][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[4][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG12: {
+                                  lat: 19.84597,
+                                  lng: 99.72928,
+                                   message: "สถานี : <%= @data[5][0]%><br>"+"อุณหภูมิ : <%= @data[5][1]%><br>"+"ระดับน้ำ : <%= @data[5][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[5][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[5][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[5][5]%>",
+                                  icon: $scope.icon
+                              },
+                              TG13: {
+                                  lat: 19.95689,
+                                  lng: 99.93733,
+                                  message: "สถานี : <%= @data[6][0]%><br>"+"อุณหภูมิ : <%= @data[6][1]%><br>"+"ระดับน้ำ : <%= @data[6][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[6][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[6][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[6][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI01: {
+                                  lat: 19.571936,
+                                  lng: 99.6955448,
+                                   message: "สถานี : <%= @data[7][0]%><br>"+"อุณหภูมิ : <%= @data[7][1]%><br>"+"ระดับน้ำ : <%= @data[7][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[7][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[7][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[7][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI02: {
+                                  lat: 19.5516542,
+                                  lng: 99.7383277,
+                                   message: "สถานี : <%= @data[8][0]%><br>"+"อุณหภูมิ : <%= @data[8][1]%><br>"+"ระดับน้ำ : <%= @data[8][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[8][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[8][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[8][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI03: {
+                                  lat: 19.9161853,
+                                  lng: 100.1120427,
+                                   message: "สถานี : <%= @data[9][0]%><br>"+"อุณหภูมิ : <%= @data[9][1]%><br>"+"ระดับน้ำ : <%= @data[9][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[9][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[9][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[9][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI04: {
+                                  lat: 19.890765,
+                                  lng: 100.1068252,
+                                   message: "สถานี : <%= @data[10][0]%><br>"+"อุณหภูมิ : <%= @data[10][1]%><br>"+"ระดับน้ำ : <%= @data[10][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[10][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[10][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[10][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI05: {
+                                  lat: 19.851362,
+                                  lng: 100.139572,
+                                   message: "สถานี : <%= @data[11][0]%><br>"+"อุณหภูมิ : <%= @data[11][1]%><br>"+"ระดับน้ำ : <%= @data[11][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[11][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[11][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[11][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI06: {
+                                  lat: 19.8332308,
+                                  lng: 100.2006674,
+                                   message: "สถานี : <%= @data[12][0]%><br>"+"อุณหภูมิ : <%= @data[12][1]%><br>"+"ระดับน้ำ : <%= @data[12][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[12][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[12][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[12][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STI07: {
+                                  lat: 19.80281,
+                                  lng: 100.35498,
+                                   message: "สถานี : <%= @data[13][0]%><br>"+"อุณหภูมิ : <%= @data[13][1]%><br>"+"ระดับน้ำ : <%= @data[13][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[13][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[13][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[13][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK01: {
+                                  lat: 20.230147,
+                                  lng: 99.80813,
+                                   message: "สถานี : <%= @data[14][0]%><br>"+"อุณหภูมิ : <%= @data[14][1]%><br>"+"ระดับน้ำ : <%= @data[14][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[14][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[14][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[14][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK02: {
+                                  lat: 20.218308,
+                                  lng: 99.856936,
+                                  message: "สถานี : <%= @data[15][0]%><br>"+"อุณหภูมิ : <%= @data[15][1]%><br>"+"ระดับน้ำ : <%= @data[15][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[15][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[15][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[15][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK03: {
+                                  lat: 20.237627,
+                                  lng: 99.904507,
+                                   message: "สถานี : <%= @data[16][0]%><br>"+"อุณหภูมิ : <%= @data[16][1]%><br>"+"ระดับน้ำ : <%= @data[16][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[16][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[16][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[16][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK04: {
+                                  lat: 20.2886,
+                                  lng: 99.945143,
+                                   message: "สถานี : <%= @data[17][0]%><br>"+"อุณหภูมิ : <%= @data[17][1]%><br>"+"ระดับน้ำ : <%= @data[17][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[17][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[17][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[17][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK05: {
+                                  lat: 20.305488,
+                                  lng: 99.991068,
+                                   message: "สถานี : <%= @data[18][0]%><br>"+"อุณหภูมิ : <%= @data[18][1]%><br>"+"ระดับน้ำ : <%= @data[18][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[18][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[18][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[18][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK06: {
+                                  lat: 20.106808,
+                                  lng: 99.765371,
+                                   message: "สถานี : <%= @data[19][0]%><br>"+"อุณหภูมิ : <%= @data[19][1]%><br>"+"ระดับน้ำ : <%= @data[19][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[19][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[19][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[19][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK07: {
+                                  lat: 20.13028,
+                                  lng: 99.834078,
+                                  message: "สถานี : <%= @data[20][0]%><br>"+"อุณหภูมิ : <%= @data[20][1]%><br>"+"ระดับน้ำ : <%= @data[20][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[20][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[20][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[20][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK10: {
+                                  lat: 20.1050282,
+                                  lng: 100.1626526,
+                                   message: "สถานี : <%= @data[21][0]%><br>"+"อุณหภูมิ : <%= @data[21][1]%><br>"+"ระดับน้ำ : <%= @data[21][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[21][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[21][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[21][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK11: {
+                                  lat: 20.10619,
+                                  lng: 100.07917,
+                                   message: "สถานี : <%= @data[22][0]%><br>"+"อุณหภูมิ : <%= @data[22][1]%><br>"+"ระดับน้ำ : <%= @data[22][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[22][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[22][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[22][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK12: {
+                                  lat: 20.1578185,
+                                  lng: 100.1153587,
+                                   message: "สถานี : <%= @data[23][0]%><br>"+"อุณหภูมิ : <%= @data[23][1]%><br>"+"ระดับน้ำ : <%= @data[23][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[23][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[23][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[23][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK13: {
+                                  lat: 19.94148,
+                                  lng: 100.433045,
+                                   message: "สถานี : <%= @data[24][0]%><br>"+"อุณหภูมิ : <%= @data[24][1]%><br>"+"ระดับน้ำ : <%= @data[24][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[24][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[24][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[24][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK14: {
+                                  lat: 20.030556,
+                                  lng: 100.4893855,
+                                   message: "สถานี : <%= @data[25][0]%><br>"+"อุณหภูมิ : <%= @data[25][1]%><br>"+"ระดับน้ำ : <%= @data[25][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[25][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[25][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[25][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STK15: {
+                                  lat: 20.1042843,
+                                  lng: 100.5092146,
+                                  message: "สถานี : <%= @data[26][0]%><br>"+"อุณหภูมิ : <%= @data[26][1]%><br>"+"ระดับน้ำ : <%= @data[26][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[26][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[26][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[26][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG01: {
+                                  lat: 20.0489686,
+                                  lng: 100.0993328,
+                                   message: "สถานี : <%= @data[27][0]%><br>"+"อุณหภูมิ : <%= @data[27][1]%><br>"+"ระดับน้ำ : <%= @data[27][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[27][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[27][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[27][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG02: {
+                                  lat: 20.00916,
+                                  lng: 100.04044,
+                                   message: "สถานี : <%= @data[28][0]%><br>"+"อุณหภูมิ : <%= @data[28][1]%><br>"+"ระดับน้ำ : <%= @data[28][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[28][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[28][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[28][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG03: {
+                                  lat: 20.0071493,
+                                  lng: 100.0268035,
+                                   message: "สถานี : <%= @data[29][0]%><br>"+"อุณหภูมิ : <%= @data[29][1]%><br>"+"ระดับน้ำ : <%= @data[29][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[29][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[29][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[29][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG05: {
+                                  lat: 20.0290401,
+                                  lng: 99.8462132,
+                                  message: "สถานี : <%= @data[30][0]%><br>"+"อุณหภูมิ : <%= @data[30][1]%><br>"+"ระดับน้ำ : <%= @data[30][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[30][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[30][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[30][5]%>",
+                                  icon: $scope.icon
+                              },
+                              STG06: {
+                                  lat: 19.977445,
+                                  lng: 99.833814,
+                                   message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
+                                  icon: $scope.icon
+                              }
+                          },
+                          point:{
+                            p1:{
+                              lat: $scope.jsonData.lat*1,
+                              lng: $scope.jsonData.lng*1,
+                              focus: true,
+                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare
+                            }
+                          }
+                        };
+                      }         
                     }
-                  
-          };
-
-          $scope.center = {
-                lat: 19.9088,
-                lng: 99.83414,
-                zoom: 12
-          };
-
-          $scope.$on("leafletDirectiveMap.click", function(event, args)
-          {
-
-            // console.log($scope.startDate);
-
-            var e = args.leafletEvent;
-            var lat = e.latlng.lat.toString();
-            var lng = e.latlng.lng.toString();
-            var data = { 
-              "lat":lat,
-              "lng":lng,
-              "startDate":$scope.startDate,
-              "finalDate":$scope.finalDate
-            };            
-            // console.log(data);
-            $.ajax({
-            method : "GET",
-            url : "infomaps/point",
-            data : data
-            }).then(function mySucces(response) {
-                $scope.jsonData = angular.fromJson(response);
-                console.log($scope.jsonData);
-                
-                if($scope.jsonData != undefined){
-                  if($scope.jsonData.flooddata.temperatare == null){
-                    var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
-                   
-                  } 
-                  else{
-                    var numTemperatare = $scope.jsonData.flooddata.temperatare;
+                    else{               
+                      alert("บริเวณนี้ไม่มีข้อมูล");
+                    }
                     
-                  }
-                  if($scope.jsonData.maxlevel != null){              
-                    $scope.markers = [{
-                      lat: $scope.jsonData.lat*1,
-                      lng: $scope.jsonData.lng*1,
-                      focus: false,
-                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"<br>อุณหภูมิ:"+numTemperatare+"<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood,
-                      icon: null
-                    }];
-                    
-                    var xCategories =[];
-                    var yWaterLevel =[];
-                    var yTemperatara =[];
+                }, function myError(response) {
+                    $scope.myWelcome = response.statusText;
+                });          
+            });            
 
-                    for(var i=0; i<$scope.jsonData.fullData.length ;i++){
-                      xCategories[i] = $scope.jsonData.fullData[i].time;
-                      yWaterLevel[i] = $scope.jsonData.fullData[i].water_level;
-                      yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
-                    };
-                     Highcharts.chart('mychart', {
-                        title: {
-                            text: $scope.jsonData.flooddata.name_station
-                        },
-
-                        xAxis: {
-                            categories: xCategories
-                        },
-
-                        series: [{
-                            name: 'ระดับน้ำ',
-                            data: yWaterLevel
-                        },{
-                            name: 'อุณหภูมิ',
-                            data: yTemperatara
-                        }]
-                      
-                    });
-                  }
-                  else{
-                      $scope.markers = [{
-                      lat: $scope.jsonData.lat*1,
-                      lng: $scope.jsonData.lng*1,
-                      focus: false,
-                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"<br>อุณหภูมิ:"+numTemperatare
-                    }];
-                  }         
-                }
-                else{               
-                  alert("บริเวณนี้ไม่มีข้อมูล");
-                }
-                
-            }, function myError(response) {
-                $scope.myWelcome = response.statusText;
-            });          
-          });
-
-
-        leafletData.getMap().then(function(map) {
+            leafletData.getMap().then(function(map) {
                leafletData.getLayers().then(function(baselayers) {
                   var drawnItems = baselayers.overlays.draw;
                   map.on('draw:created', function (e) {
@@ -220,76 +861,94 @@
                         "y4":layer.toGeoJSON().geometry.coordinates[0][3][1],
                         "x5":layer.toGeoJSON().geometry.coordinates[0][4][0],
                         "y5":layer.toGeoJSON().geometry.coordinates[0][4][1]
-                      }
+                      };
                     }
                     else{
-                      var data ={
+                      var data = {
                         "type":layer.toGeoJSON().geometry.type,
                         "x1":layer.toGeoJSON().geometry.coordinates[0],
                         "y1":layer.toGeoJSON().geometry.coordinates[1],
-                        "radius":layer
-                      }
+                        "radius":layer._mRadius
+                      };
                     }
                     
                     console.log(layer.toGeoJSON());
                     console.log(data);
                     $.ajax({
                       method : "GET",
-                      url : "infomaps/control",
+                      url : "places/findplace",
                       data : data
                       }).then(function mySucces(response) {
-                          $scope.jsonData = angular.fromJson(response);
-                          console.log($scope.jsonData);
+                          jsonData = angular.fromJson(response);
+                          console.log(jsonData);
+                          console.log(jsonData.object[0]);
+                          console.log(jsonData.object.length);
+
+                          for(j = 0; j <jsonData.object.length; j++){
+                            
+                          }
+
+                          for(i =0 ; i<jsonData.object.length; i++){
+                            $scope.markers[i] ={
+                              area:{
+                                lat: jsonData.object[i][0]*1,
+                                lng: jsonData.object[i][1]*1,
+                                focus: true,
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare
+                              }
+                            };
+                          }
                       }, function myError(response) {
                           $scope.myWelcome = response.statusText;
                     });    
                   });
                });
-           });        
-       
-      }]);
-         
+            });
+       }]);
     </script>
+    
   </head>
   <body ng-controller="MapController">
-  <div class="container">
-    <div class="row">
-      <nav class="navbar navbar-inverse">
-          <div class="col-md-12 col-md-offset-2">
-          <div class="col-md-12">
-            <h4 style="color:white">Web Application for Query and Analyze Spatial - Temporal Flood Data in Chiang Rai</h4>
-          </div>
-          <div class="col-md-12">
-            <h4 style="color:white">เว็บแอพพลิเคชั่นเพื่อสืบค้นและวิเคราะห์ข้อมูลน้ำท่วมเชิงพื้นที่และเชิงเวลาของจังหวัดเชียงราย</h4>
-          </div>
-          </div>
-      </nav>
+
+    <div class="container">
       <div class="row">
-        <div class="col-md-12 col-md-offset-2">
-          <span>เลือกช่วงเวลาที่ต้องการค้นหาข้อมูลระหว่างวันที่</span>
-          <input type="date" class="btn btn-primary" name="startDate" ng-model="startDate">
-          <span>และ</span>
-           <input type="date" class="btn btn-primary" name="finalDate" ng-model="finalDate">
-        </div>       
+        <nav class="navbar navbar-inverse">
+            <div class="col-md-12 col-md-offset-2">
+            <div class="col-md-12">
+              <h4 style="color:white">Web Application for Query and Analyze Spatial - Temporal Flood Data in Chiang Rai</h4>
+            </div>
+            <div class="col-md-12">
+              <h4 style="color:white">เว็บแอพพลิเคชั่นเพื่อสืบค้นและวิเคราะห์ข้อมูลน้ำท่วมเชิงพื้นที่และเชิงเวลาของจังหวัดเชียงราย</h4>
+            </div>
+            </div>
+        </nav>
+        <div class="row">
+          <div class="col-md-12 col-md-offset-2">
+            <span>เลือกช่วงเวลาที่ต้องการค้นหาข้อมูลระหว่างวันที่</span>
+            <input type="date" class="btn btn-primary" name="startDate" ng-model="startDate" >
+            <span>และ</span>
+             <input type="date" class="btn btn-primary" name="finalDate" ng-model="finalDate" >
+          </div>       
+        </div>
       </div>
-    </div>
-    <div class="row">     
-      <div class="col-md-12">
-        <div style="width: 100%; height: 550px; margin: 0px ;">
-        <br>
-          <leaflet lf-center="center" 
-                    style="width:100%; height:100%;"
-                    markers="markers"
-                    markers-nested="true"                    
-                    layers="layers" 
-                    controls="controls">                      
-          </leaflet>
-        </div>    
+      <div class="row">     
+        <div class="col-md-12">
+          <div style="width: 100%; height: 550px; margin: 0px ;">
+          <br>
+            <leaflet lf-center="center" 
+                      style="width:100%; height:100%;"
+                      markers="markers"
+                      markers-nested="true"                    
+                      layers="layers" 
+                      controls="controls">                      
+            </leaflet>
+          </div>    
+        </div>
       </div>
+      <div class="row">                   
+          <div id="mychart"></div>
+          <div id="mychart2"></div>
+      </div>     
     </div>
-    <div class="row">                   
-        <div id="mychart"></div>
-    </div>     
-  </div>
   </body>
 </html>
