@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html ng-app="crfloodweb">
   <head>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script> -->
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
-    <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+
+     <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script> -->
+     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
     <!-- Highchart-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,6 +22,7 @@
   
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
 
     <script>
         var getJson = setInterval(myTimer, 3600000);
@@ -42,7 +44,239 @@
 
         var app = angular.module("crfloodweb", ["leaflet-directive"]);
         app.controller("MapController", [ "$scope", "leafletData", function($scope,leafletData) {
-          
+            $scope.atm = {
+              "iconUrl": '<%= asset_path 'atm.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.bank = {
+              "iconUrl": '<%= asset_path 'bank.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.bar = {
+              "iconUrl": '<%= asset_path 'bar.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.barn = {
+              "iconUrl": '<%= asset_path 'barn.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.bbq = {
+              "iconUrl": '<%= asset_path 'bbq.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.building = {
+              "iconUrl": '<%= asset_path 'building.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.bureau_de_change = {
+              "iconUrl": '<%= asset_path 'bureau_de_change.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.bus_station = {
+              "iconUrl": '<%= asset_path 'bus_station.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.cafe = {
+              "iconUrl": '<%= asset_path 'cafe.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.camp_site = {
+              "iconUrl": '<%= asset_path 'camp_site.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.car_rental = {
+              "iconUrl": '<%= asset_path 'car_rental.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.car_wash = {
+              "iconUrl": '<%= asset_path 'car_wash.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.church = {
+              "iconUrl": '<%= asset_path 'church.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.college = {
+              "iconUrl": '<%= asset_path 'college.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.company = {
+              "iconUrl": '<%= asset_path 'company.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.cosmetic = {
+              "iconUrl": '<%= asset_path 'cosmetic.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.doctor = {
+              "iconUrl": '<%= asset_path 'doctor.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.farm = {
+              "iconUrl": '<%= asset_path 'farm.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.fast_food = {
+              "iconUrl": '<%= asset_path 'fast_food.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.ferry_terminal = {
+              "iconUrl": '<%= asset_path 'ferry_terminal.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.food_court = {
+              "iconUrl": '<%= asset_path 'food_court.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.fuel = {
+              "iconUrl": '<%= asset_path 'fuel.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.government = {
+              "iconUrl": '<%= asset_path 'government.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.grave_yard = {
+              "iconUrl": '<%= asset_path 'grave_yard.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.guest_house = {
+              "iconUrl": '<%= asset_path 'guest_house.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.gutter = {
+              "iconUrl": '<%= asset_path 'gutter.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.hospital = {
+              "iconUrl": '<%= asset_path 'hospital.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.hostel = {
+              "iconUrl": '<%= asset_path 'hostel.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.hotel = {
+              "iconUrl": '<%= asset_path 'hotel.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.house = {
+              "iconUrl": '<%= asset_path 'house.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.insurance = {
+              "iconUrl": '<%= asset_path 'insurance.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.kindergarten = {
+              "iconUrl": '<%= asset_path 'kindergarten.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.lawyer = {
+              "iconUrl": '<%= asset_path 'lawyer.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.library = {
+              "iconUrl": '<%= asset_path 'library.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.marketplace = {
+              "iconUrl": '<%= asset_path 'marketplace.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.mineral_bath = {
+              "iconUrl": '<%= asset_path 'mineral_bath.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.museum = {
+              "iconUrl": '<%= asset_path 'museum.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.nightclub = {
+              "iconUrl": '<%= asset_path 'nightclub.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.office = {
+              "iconUrl": '<%= asset_path 'office.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.pharmacy = {
+              "iconUrl": '<%= asset_path 'pharmacy.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.police = {
+              "iconUrl": '<%= asset_path 'police.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.post_office = {
+              "iconUrl": '<%= asset_path 'post_office.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.pub = {
+              "iconUrl": '<%= asset_path 'pub.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.public_building = {
+              "iconUrl": '<%= asset_path 'public_building.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.residential = {
+              "iconUrl": '<%= asset_path 'residential.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.restaurant = {
+              "iconUrl": '<%= asset_path 'restaurant.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.school = {
+              "iconUrl": '<%= asset_path 'school.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.shelter = {
+              "iconUrl": '<%= asset_path 'shelter.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.shop = {
+              "iconUrl": '<%= asset_path 'shop.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.sign = {
+              "iconUrl": '<%= asset_path 'sign.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.taxi = {
+              "iconUrl": '<%= asset_path 'taxi.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.temple = {
+              "iconUrl": '<%= asset_path 'temple.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.theme_park = {
+              "iconUrl": '<%= asset_path 'theme_park.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.townhall = {
+              "iconUrl": '<%= asset_path 'townhall.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.travel_agent = {
+              "iconUrl": '<%= asset_path 'travel_agent.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.vending_machine = {
+              "iconUrl": '<%= asset_path 'vending_machine.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.veterinary = {
+              "iconUrl": '<%= asset_path 'veterinary.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.viewpoint = {
+              "iconUrl": '<%= asset_path 'viewpoint.png' %>',
+              "iconSize": [25, 25]
+            };
+
             $scope.icon = {
               "iconUrl": image_path,
               "iconSize": [25, 25]
@@ -69,7 +303,8 @@
                         },
                         TG04: {
                             lat: 19.62297,
-                            lng: 99.47661,
+                            lng: 99.47661,        
+                            focus: true,
                              message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
                             icon: $scope.icon
                         },
@@ -253,7 +488,9 @@
                              message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
                             icon: $scope.icon
                         }
-                    }
+                    },
+                    point :[],
+                    area: []
             };
 
             $scope.layers = {
@@ -369,210 +606,13 @@
                         
                       }
                       if($scope.jsonData.maxlevel != null){              
-                        $scope.markers = {
-                           station: {
-                              TG03: {
-                                  lat: 19.54796,
-                                  lng: 99.47359,
-                                  message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG04: {
-                                  lat: 19.62297,
-                                  lng: 99.47661,
-                                   message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG05: {
-                                  lat: 19.65264,
-                                  lng: 99.53839,
-                                  message: "สถานี : <%= @data[2][0]%><br>"+"อุณหภูมิ : <%= @data[2][1]%><br>"+"ระดับน้ำ : <%= @data[2][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[2][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[2][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[2][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG06: {
-                                  lat: 19.84342,
-                                  lng: 99.81328,
-                                   message: "สถานี : <%= @data[3][0]%><br>"+"อุณหภูมิ : <%= @data[3][1]%><br>"+"ระดับน้ำ : <%= @data[3][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[3][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[3][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[3][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG11: {
-                                  lat: 19.93539,
-                                  lng: 99.77031,
-                                   message: "สถานี : <%= @data[4][0]%><br>"+"อุณหภูมิ : <%= @data[4][1]%><br>"+"ระดับน้ำ : <%= @data[4][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[4][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[4][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[4][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG12: {
-                                  lat: 19.84597,
-                                  lng: 99.72928,
-                                   message: "สถานี : <%= @data[5][0]%><br>"+"อุณหภูมิ : <%= @data[5][1]%><br>"+"ระดับน้ำ : <%= @data[5][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[5][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[5][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[5][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG13: {
-                                  lat: 19.95689,
-                                  lng: 99.93733,
-                                  message: "สถานี : <%= @data[6][0]%><br>"+"อุณหภูมิ : <%= @data[6][1]%><br>"+"ระดับน้ำ : <%= @data[6][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[6][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[6][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[6][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI01: {
-                                  lat: 19.571936,
-                                  lng: 99.6955448,
-                                   message: "สถานี : <%= @data[7][0]%><br>"+"อุณหภูมิ : <%= @data[7][1]%><br>"+"ระดับน้ำ : <%= @data[7][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[7][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[7][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[7][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI02: {
-                                  lat: 19.5516542,
-                                  lng: 99.7383277,
-                                   message: "สถานี : <%= @data[8][0]%><br>"+"อุณหภูมิ : <%= @data[8][1]%><br>"+"ระดับน้ำ : <%= @data[8][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[8][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[8][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[8][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI03: {
-                                  lat: 19.9161853,
-                                  lng: 100.1120427,
-                                   message: "สถานี : <%= @data[9][0]%><br>"+"อุณหภูมิ : <%= @data[9][1]%><br>"+"ระดับน้ำ : <%= @data[9][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[9][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[9][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[9][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI04: {
-                                  lat: 19.890765,
-                                  lng: 100.1068252,
-                                   message: "สถานี : <%= @data[10][0]%><br>"+"อุณหภูมิ : <%= @data[10][1]%><br>"+"ระดับน้ำ : <%= @data[10][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[10][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[10][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[10][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI05: {
-                                  lat: 19.851362,
-                                  lng: 100.139572,
-                                   message: "สถานี : <%= @data[11][0]%><br>"+"อุณหภูมิ : <%= @data[11][1]%><br>"+"ระดับน้ำ : <%= @data[11][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[11][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[11][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[11][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI06: {
-                                  lat: 19.8332308,
-                                  lng: 100.2006674,
-                                   message: "สถานี : <%= @data[12][0]%><br>"+"อุณหภูมิ : <%= @data[12][1]%><br>"+"ระดับน้ำ : <%= @data[12][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[12][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[12][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[12][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI07: {
-                                  lat: 19.80281,
-                                  lng: 100.35498,
-                                   message: "สถานี : <%= @data[13][0]%><br>"+"อุณหภูมิ : <%= @data[13][1]%><br>"+"ระดับน้ำ : <%= @data[13][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[13][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[13][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[13][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK01: {
-                                  lat: 20.230147,
-                                  lng: 99.80813,
-                                   message: "สถานี : <%= @data[14][0]%><br>"+"อุณหภูมิ : <%= @data[14][1]%><br>"+"ระดับน้ำ : <%= @data[14][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[14][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[14][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[14][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK02: {
-                                  lat: 20.218308,
-                                  lng: 99.856936,
-                                  message: "สถานี : <%= @data[15][0]%><br>"+"อุณหภูมิ : <%= @data[15][1]%><br>"+"ระดับน้ำ : <%= @data[15][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[15][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[15][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[15][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK03: {
-                                  lat: 20.237627,
-                                  lng: 99.904507,
-                                   message: "สถานี : <%= @data[16][0]%><br>"+"อุณหภูมิ : <%= @data[16][1]%><br>"+"ระดับน้ำ : <%= @data[16][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[16][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[16][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[16][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK04: {
-                                  lat: 20.2886,
-                                  lng: 99.945143,
-                                   message: "สถานี : <%= @data[17][0]%><br>"+"อุณหภูมิ : <%= @data[17][1]%><br>"+"ระดับน้ำ : <%= @data[17][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[17][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[17][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[17][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK05: {
-                                  lat: 20.305488,
-                                  lng: 99.991068,
-                                   message: "สถานี : <%= @data[18][0]%><br>"+"อุณหภูมิ : <%= @data[18][1]%><br>"+"ระดับน้ำ : <%= @data[18][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[18][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[18][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[18][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK06: {
-                                  lat: 20.106808,
-                                  lng: 99.765371,
-                                   message: "สถานี : <%= @data[19][0]%><br>"+"อุณหภูมิ : <%= @data[19][1]%><br>"+"ระดับน้ำ : <%= @data[19][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[19][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[19][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[19][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK07: {
-                                  lat: 20.13028,
-                                  lng: 99.834078,
-                                  message: "สถานี : <%= @data[20][0]%><br>"+"อุณหภูมิ : <%= @data[20][1]%><br>"+"ระดับน้ำ : <%= @data[20][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[20][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[20][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[20][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK10: {
-                                  lat: 20.1050282,
-                                  lng: 100.1626526,
-                                   message: "สถานี : <%= @data[21][0]%><br>"+"อุณหภูมิ : <%= @data[21][1]%><br>"+"ระดับน้ำ : <%= @data[21][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[21][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[21][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[21][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK11: {
-                                  lat: 20.10619,
-                                  lng: 100.07917,
-                                   message: "สถานี : <%= @data[22][0]%><br>"+"อุณหภูมิ : <%= @data[22][1]%><br>"+"ระดับน้ำ : <%= @data[22][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[22][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[22][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[22][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK12: {
-                                  lat: 20.1578185,
-                                  lng: 100.1153587,
-                                   message: "สถานี : <%= @data[23][0]%><br>"+"อุณหภูมิ : <%= @data[23][1]%><br>"+"ระดับน้ำ : <%= @data[23][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[23][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[23][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[23][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK13: {
-                                  lat: 19.94148,
-                                  lng: 100.433045,
-                                   message: "สถานี : <%= @data[24][0]%><br>"+"อุณหภูมิ : <%= @data[24][1]%><br>"+"ระดับน้ำ : <%= @data[24][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[24][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[24][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[24][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK14: {
-                                  lat: 20.030556,
-                                  lng: 100.4893855,
-                                   message: "สถานี : <%= @data[25][0]%><br>"+"อุณหภูมิ : <%= @data[25][1]%><br>"+"ระดับน้ำ : <%= @data[25][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[25][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[25][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[25][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK15: {
-                                  lat: 20.1042843,
-                                  lng: 100.5092146,
-                                  message: "สถานี : <%= @data[26][0]%><br>"+"อุณหภูมิ : <%= @data[26][1]%><br>"+"ระดับน้ำ : <%= @data[26][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[26][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[26][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[26][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG01: {
-                                  lat: 20.0489686,
-                                  lng: 100.0993328,
-                                   message: "สถานี : <%= @data[27][0]%><br>"+"อุณหภูมิ : <%= @data[27][1]%><br>"+"ระดับน้ำ : <%= @data[27][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[27][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[27][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[27][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG02: {
-                                  lat: 20.00916,
-                                  lng: 100.04044,
-                                   message: "สถานี : <%= @data[28][0]%><br>"+"อุณหภูมิ : <%= @data[28][1]%><br>"+"ระดับน้ำ : <%= @data[28][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[28][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[28][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[28][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG03: {
-                                  lat: 20.0071493,
-                                  lng: 100.0268035,
-                                   message: "สถานี : <%= @data[29][0]%><br>"+"อุณหภูมิ : <%= @data[29][1]%><br>"+"ระดับน้ำ : <%= @data[29][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[29][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[29][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[29][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG05: {
-                                  lat: 20.0290401,
-                                  lng: 99.8462132,
-                                  message: "สถานี : <%= @data[30][0]%><br>"+"อุณหภูมิ : <%= @data[30][1]%><br>"+"ระดับน้ำ : <%= @data[30][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[30][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[30][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[30][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG06: {
-                                  lat: 19.977445,
-                                  lng: 99.833814,
-                                   message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
-                                  icon: $scope.icon
-                              }
-                          },
-                          point:{
-                            p1:{
+                        $scope.markers.point = [{
                               lat: $scope.jsonData.lat*1,
                               lng: $scope.jsonData.lng*1,
                               focus: true,
                               message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
-                            }
-                          }
-                        };                        
+
+                        }];                        
                         
                         var xCategories =[];
                         var yWaterLevel =[];
@@ -625,210 +665,12 @@
                         });
                       }
                       else{
-                        $scope.markers = {
-                          station: {
-                              TG03: {
-                                  lat: 19.54796,
-                                  lng: 99.47359,
-                                  message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG04: {
-                                  lat: 19.62297,
-                                  lng: 99.47661,
-                                   message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG05: {
-                                  lat: 19.65264,
-                                  lng: 99.53839,
-                                  message: "สถานี : <%= @data[2][0]%><br>"+"อุณหภูมิ : <%= @data[2][1]%><br>"+"ระดับน้ำ : <%= @data[2][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[2][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[2][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[2][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG06: {
-                                  lat: 19.84342,
-                                  lng: 99.81328,
-                                   message: "สถานี : <%= @data[3][0]%><br>"+"อุณหภูมิ : <%= @data[3][1]%><br>"+"ระดับน้ำ : <%= @data[3][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[3][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[3][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[3][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG11: {
-                                  lat: 19.93539,
-                                  lng: 99.77031,
-                                   message: "สถานี : <%= @data[4][0]%><br>"+"อุณหภูมิ : <%= @data[4][1]%><br>"+"ระดับน้ำ : <%= @data[4][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[4][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[4][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[4][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG12: {
-                                  lat: 19.84597,
-                                  lng: 99.72928,
-                                   message: "สถานี : <%= @data[5][0]%><br>"+"อุณหภูมิ : <%= @data[5][1]%><br>"+"ระดับน้ำ : <%= @data[5][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[5][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[5][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[5][5]%>",
-                                  icon: $scope.icon
-                              },
-                              TG13: {
-                                  lat: 19.95689,
-                                  lng: 99.93733,
-                                  message: "สถานี : <%= @data[6][0]%><br>"+"อุณหภูมิ : <%= @data[6][1]%><br>"+"ระดับน้ำ : <%= @data[6][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[6][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[6][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[6][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI01: {
-                                  lat: 19.571936,
-                                  lng: 99.6955448,
-                                   message: "สถานี : <%= @data[7][0]%><br>"+"อุณหภูมิ : <%= @data[7][1]%><br>"+"ระดับน้ำ : <%= @data[7][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[7][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[7][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[7][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI02: {
-                                  lat: 19.5516542,
-                                  lng: 99.7383277,
-                                   message: "สถานี : <%= @data[8][0]%><br>"+"อุณหภูมิ : <%= @data[8][1]%><br>"+"ระดับน้ำ : <%= @data[8][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[8][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[8][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[8][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI03: {
-                                  lat: 19.9161853,
-                                  lng: 100.1120427,
-                                   message: "สถานี : <%= @data[9][0]%><br>"+"อุณหภูมิ : <%= @data[9][1]%><br>"+"ระดับน้ำ : <%= @data[9][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[9][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[9][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[9][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI04: {
-                                  lat: 19.890765,
-                                  lng: 100.1068252,
-                                   message: "สถานี : <%= @data[10][0]%><br>"+"อุณหภูมิ : <%= @data[10][1]%><br>"+"ระดับน้ำ : <%= @data[10][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[10][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[10][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[10][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI05: {
-                                  lat: 19.851362,
-                                  lng: 100.139572,
-                                   message: "สถานี : <%= @data[11][0]%><br>"+"อุณหภูมิ : <%= @data[11][1]%><br>"+"ระดับน้ำ : <%= @data[11][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[11][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[11][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[11][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI06: {
-                                  lat: 19.8332308,
-                                  lng: 100.2006674,
-                                   message: "สถานี : <%= @data[12][0]%><br>"+"อุณหภูมิ : <%= @data[12][1]%><br>"+"ระดับน้ำ : <%= @data[12][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[12][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[12][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[12][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STI07: {
-                                  lat: 19.80281,
-                                  lng: 100.35498,
-                                   message: "สถานี : <%= @data[13][0]%><br>"+"อุณหภูมิ : <%= @data[13][1]%><br>"+"ระดับน้ำ : <%= @data[13][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[13][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[13][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[13][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK01: {
-                                  lat: 20.230147,
-                                  lng: 99.80813,
-                                   message: "สถานี : <%= @data[14][0]%><br>"+"อุณหภูมิ : <%= @data[14][1]%><br>"+"ระดับน้ำ : <%= @data[14][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[14][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[14][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[14][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK02: {
-                                  lat: 20.218308,
-                                  lng: 99.856936,
-                                  message: "สถานี : <%= @data[15][0]%><br>"+"อุณหภูมิ : <%= @data[15][1]%><br>"+"ระดับน้ำ : <%= @data[15][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[15][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[15][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[15][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK03: {
-                                  lat: 20.237627,
-                                  lng: 99.904507,
-                                   message: "สถานี : <%= @data[16][0]%><br>"+"อุณหภูมิ : <%= @data[16][1]%><br>"+"ระดับน้ำ : <%= @data[16][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[16][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[16][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[16][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK04: {
-                                  lat: 20.2886,
-                                  lng: 99.945143,
-                                   message: "สถานี : <%= @data[17][0]%><br>"+"อุณหภูมิ : <%= @data[17][1]%><br>"+"ระดับน้ำ : <%= @data[17][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[17][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[17][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[17][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK05: {
-                                  lat: 20.305488,
-                                  lng: 99.991068,
-                                   message: "สถานี : <%= @data[18][0]%><br>"+"อุณหภูมิ : <%= @data[18][1]%><br>"+"ระดับน้ำ : <%= @data[18][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[18][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[18][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[18][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK06: {
-                                  lat: 20.106808,
-                                  lng: 99.765371,
-                                   message: "สถานี : <%= @data[19][0]%><br>"+"อุณหภูมิ : <%= @data[19][1]%><br>"+"ระดับน้ำ : <%= @data[19][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[19][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[19][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[19][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK07: {
-                                  lat: 20.13028,
-                                  lng: 99.834078,
-                                  message: "สถานี : <%= @data[20][0]%><br>"+"อุณหภูมิ : <%= @data[20][1]%><br>"+"ระดับน้ำ : <%= @data[20][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[20][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[20][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[20][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK10: {
-                                  lat: 20.1050282,
-                                  lng: 100.1626526,
-                                   message: "สถานี : <%= @data[21][0]%><br>"+"อุณหภูมิ : <%= @data[21][1]%><br>"+"ระดับน้ำ : <%= @data[21][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[21][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[21][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[21][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK11: {
-                                  lat: 20.10619,
-                                  lng: 100.07917,
-                                   message: "สถานี : <%= @data[22][0]%><br>"+"อุณหภูมิ : <%= @data[22][1]%><br>"+"ระดับน้ำ : <%= @data[22][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[22][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[22][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[22][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK12: {
-                                  lat: 20.1578185,
-                                  lng: 100.1153587,
-                                   message: "สถานี : <%= @data[23][0]%><br>"+"อุณหภูมิ : <%= @data[23][1]%><br>"+"ระดับน้ำ : <%= @data[23][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[23][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[23][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[23][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK13: {
-                                  lat: 19.94148,
-                                  lng: 100.433045,
-                                   message: "สถานี : <%= @data[24][0]%><br>"+"อุณหภูมิ : <%= @data[24][1]%><br>"+"ระดับน้ำ : <%= @data[24][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[24][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[24][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[24][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK14: {
-                                  lat: 20.030556,
-                                  lng: 100.4893855,
-                                   message: "สถานี : <%= @data[25][0]%><br>"+"อุณหภูมิ : <%= @data[25][1]%><br>"+"ระดับน้ำ : <%= @data[25][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[25][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[25][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[25][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STK15: {
-                                  lat: 20.1042843,
-                                  lng: 100.5092146,
-                                  message: "สถานี : <%= @data[26][0]%><br>"+"อุณหภูมิ : <%= @data[26][1]%><br>"+"ระดับน้ำ : <%= @data[26][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[26][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[26][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[26][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG01: {
-                                  lat: 20.0489686,
-                                  lng: 100.0993328,
-                                   message: "สถานี : <%= @data[27][0]%><br>"+"อุณหภูมิ : <%= @data[27][1]%><br>"+"ระดับน้ำ : <%= @data[27][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[27][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[27][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[27][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG02: {
-                                  lat: 20.00916,
-                                  lng: 100.04044,
-                                   message: "สถานี : <%= @data[28][0]%><br>"+"อุณหภูมิ : <%= @data[28][1]%><br>"+"ระดับน้ำ : <%= @data[28][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[28][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[28][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[28][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG03: {
-                                  lat: 20.0071493,
-                                  lng: 100.0268035,
-                                   message: "สถานี : <%= @data[29][0]%><br>"+"อุณหภูมิ : <%= @data[29][1]%><br>"+"ระดับน้ำ : <%= @data[29][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[29][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[29][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[29][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG05: {
-                                  lat: 20.0290401,
-                                  lng: 99.8462132,
-                                  message: "สถานี : <%= @data[30][0]%><br>"+"อุณหภูมิ : <%= @data[30][1]%><br>"+"ระดับน้ำ : <%= @data[30][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[30][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[30][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[30][5]%>",
-                                  icon: $scope.icon
-                              },
-                              STG06: {
-                                  lat: 19.977445,
-                                  lng: 99.833814,
-                                   message: "สถานี : <%= @data[31][0]%><br>"+"อุณหภูมิ : <%= @data[31][1]%><br>"+"ระดับน้ำ : <%= @data[31][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[31][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[31][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[31][5]%>",
-                                  icon: $scope.icon
-                              }
-                          },
-                          point:{
-                            p1:{
-                              lat: $scope.jsonData.lat*1,
+                        $scope.markers.point = [{
+                           lat: $scope.jsonData.lat*1,
                               lng: $scope.jsonData.lng*1,
                               focus: true,
                               message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare
-                            }
-                          }
-                        };
+                        }];
                       }         
                     }
                     else{               
@@ -884,19 +726,192 @@
                           console.log(jsonData.object[0]);
                           console.log(jsonData.object.length);
 
-                          $scope.markers = {
-                            area: []
-                          };
-
                           for(i =0 ; i<jsonData.object.length; i++){
                             $scope.markers.area[i] ={
-                                  lat: jsonData.object[i][0]*1,
-                                  lng: jsonData.object[i][1]*1,
-                                  focus: true,
-                                  message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare
-                                };
+                              lat: jsonData.object[i][0]*1,
+                              lng: jsonData.object[i][1]*1,
+                              focus: true,
+                              message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare,
+                              icon: null
+                            };
+                            var typeOfPlace = jsonData.object[i][4];
+
+                            if(typeOfPlace == "atm"){
+                              $scope.markers.area[i].icon = $scope.atm;
+                            }
+                            else if(typeOfPlace == "bank"){
+                              $scope.markers.area[i].icon = $scope.bank;
+                            }
+                            else if(typeOfPlace == "bar"){
+                              $scope.markers.area[i].icon = $scope.bar;
+                            }
+                            else if(typeOfPlace == "bbq"){
+                              $scope.markers.area[i].icon = $scope.bbq;
+                            }
+                            else if(typeOfPlace == "building" || typeOfPlace == "community_centre"){
+                              $scope.markers.area[i].icon = $scope.building;
+                            }
+                            else if(typeOfPlace == "bureau_de_change"){
+                              $scope.markers.area[i].icon = $scope.bureau_de_change;
+                            }
+                            else if(typeOfPlace == "bus_station"){
+                              $scope.markers.area[i].icon = $scope.bus_station;
+                            }
+                            else if(typeOfPlace == "cafe"){
+                              $scope.markers.area[i].icon = $scope.cafe;
+                            }
+                            else if(typeOfPlace == "camp_site"){
+                              $scope.markers.area[i].icon = $scope.camp_site;
+                            }
+                            else if(typeOfPlace == "car_rental"){
+                              $scope.markers.area[i].icon = $scope.car_rental;
+                            }
+                            else if(typeOfPlace == "car_wash"){
+                              $scope.markers.area[i].icon = $scope.car_wash;
+                            }
+                            else if(typeOfPlace == "church"){
+                              $scope.markers.area[i].icon = $scope.church;
+                            }
+                            else if(typeOfPlace == "college"){
+                              $scope.markers.area[i].icon = $scope.college;
+                            }
+                            else if(typeOfPlace == "company"){
+                              $scope.markers.area[i].icon = $scope.company;
+                            }
+                            else if(typeOfPlace == "cosmetic"){
+                              $scope.markers.area[i].icon = $scope.cosmetic;
+                            }
+                            else if(typeOfPlace == "doctor" || typeOfPlace == "doctors"){
+                              $scope.markers.area[i].icon = $scope.doctor;
+                            }
+                            else if(typeOfPlace == "farm"){
+                              $scope.markers.area[i].icon = $scope.farm;
+                            }
+                            else if(typeOfPlace == "fast_food"){
+                              $scope.markers.area[i].icon = $scope.fast_food;
+                            }
+                            else if(typeOfPlace == "ferry_terminal"){
+                              $scope.markers.area[i].icon = $scope.ferry_terminal;
+                            }
+                            else if(typeOfPlace == "food_court"){
+                              $scope.markers.area[i].icon = $scope.food_court;
+                            }
+                            else if(typeOfPlace == "fuel"){
+                              $scope.markers.area[i].icon = $scope.fuel;
+                            }
+                            else if(typeOfPlace == "government"){
+                              $scope.markers.area[i].icon = $scope.government;
+                            }
+                            else if(typeOfPlace == "grave_yard"){
+                              $scope.markers.area[i].icon = $scope.grave_yard;
+                            }
+                            else if(typeOfPlace == "guest_house"){
+                              $scope.markers.area[i].icon = $scope.guest_house;
+                            }
+                            else if(typeOfPlace == "gutter"){
+                              $scope.markers.area[i].icon = $scope.gutter;
+                            }
+                            else if(typeOfPlace == "hospital"){
+                              $scope.markers.area[i].icon = $scope.hospital;
+                            }
+                            else if(typeOfPlace == "hostel"){
+                              $scope.markers.area[i].icon = $scope.hostel;
+                            }
+                            else if(typeOfPlace == "hotel"){
+                              $scope.markers.area[i].icon = $scope.hotel;
+                            }
+                            else if(typeOfPlace == "house"){
+                              $scope.markers.area[i].icon = $scope.house;
+                            }
+                            else if(typeOfPlace == "insurance"){
+                              $scope.markers.area[i].icon = $scope.insurance;
+                            }
+                            else if(typeOfPlace == "kindergarten"){
+                              $scope.markers.area[i].icon = $scope.kindergarten;
+                            }
+                            else if(typeOfPlace == "lawyer"){
+                              $scope.markers.area[i].icon = $scope.lawyer;
+                            }
+                            else if(typeOfPlace == "library"){
+                              $scope.markers.area[i].icon = $scope.library;
+                            }
+                            else if(typeOfPlace == "marketplace"){
+                              $scope.markers.area[i].icon = $scope.marketplace;
+                            }
+                            else if(typeOfPlace == "mineral_bath"){
+                              $scope.markers.area[i].icon = $scope.mineral_bath;
+                            }
+                            else if(typeOfPlace == "museum"){
+                              $scope.markers.area[i].icon = $scope.museum;
+                            }
+                            else if(typeOfPlace == "nightclub"){
+                              $scope.markers.area[i].icon = $scope.nightclub;
+                            }
+                            else if(typeOfPlace == "office"){
+                              $scope.markers.area[i].icon = $scope.office;
+                            }
+                            else if(typeOfPlace == "pharmacy"){
+                              $scope.markers.area[i].icon = $scope.pharmacy;
+                            }
+                            else if(typeOfPlace == "police"){
+                              $scope.markers.area[i].icon = $scope.police;
+                            }
+                            else if(typeOfPlace == "post_office"){
+                              $scope.markers.area[i].icon = $scope.post_office;
+                            }
+                            else if(typeOfPlace == "pub"){
+                              $scope.markers.area[i].icon = $scope.pub;
+                            }
+                            else if(typeOfPlace == "public_building"){
+                              $scope.markers.area[i].icon = $scope.public_building;
+                            }
+                            else if(typeOfPlace == "residential"){
+                              $scope.markers.area[i].icon = $scope.residential;
+                            }
+                            else if(typeOfPlace == "restaurant"){
+                              $scope.markers.area[i].icon = $scope.restaurant;
+                            }
+                            else if(typeOfPlace == "school"){
+                              $scope.markers.area[i].icon = $scope.school;
+                            }
+                            else if(typeOfPlace == "shelter"){
+                              $scope.markers.area[i].icon = $scope.shelter;
+                            }
+                            else if(typeOfPlace == "shop"){
+                              $scope.markers.area[i].icon = $scope.shop;
+                            }
+                            else if(typeOfPlace == "sign"){
+                              $scope.markers.area[i].icon = $scope.sign;
+                            }
+                            else if(typeOfPlace == "taxi"){
+                              $scope.markers.area[i].icon = $scope.taxi;
+                            }
+                            else if(typeOfPlace == "temple" || typeOfPlace == "place_of_worship"){
+                              $scope.markers.area[i].icon = $scope.temple;
+                            }
+                            else if(typeOfPlace == "theme_park"){
+                              $scope.markers.area[i].icon = $scope.theme_park;
+                            }
+                            else if(typeOfPlace == "townhall"){
+                              $scope.markers.area[i].icon = $scope.townhall;
+                            }
+                            else if(typeOfPlace == "travel_agent"){
+                              $scope.markers.area[i].icon = $scope.travel_agent;
+                            }
+                            else if(typeOfPlace == "vending_machine"){
+                              $scope.markers.area[i].icon = $scope.vending_machine;
+                            }
+                            else if(typeOfPlace == "veterinary"){
+                              $scope.markers.area[i].icon = $scope.veterinary;
+                            }
+                            else if(typeOfPlace == "viewpoint"){
+                              $scope.markers.area[i].icon = $scope.viewpoint;
+                            }
+                            else{
+                              $scope.markers.area[i].icon = null;
+                            }
                             
-                          }
+                          }                       
 
                       }, function myError(response) {
                           $scope.myWelcome = response.statusText;
