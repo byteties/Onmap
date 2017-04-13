@@ -7,8 +7,7 @@
      <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
     <!-- Highchart-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+   
 
 
     <!-- Latest compiled and minified CSS -->
@@ -18,7 +17,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
   
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
@@ -40,6 +39,9 @@
           }
     </script>
     <script>
+
+
+
         var image_path = '<%= asset_path 'station-marker.png' %>'
 
         var app = angular.module("crfloodweb", ["leaflet-directive"]);
@@ -520,7 +522,7 @@
                         }                                           
                     },                    
                     overlays:{
-                           station: {
+                          station: {
                             name: 'CRflood Station',
                             type: 'group',
                             visible: true                            
@@ -610,7 +612,7 @@
                               lat: $scope.jsonData.lat*1,
                               lng: $scope.jsonData.lng*1,
                               focus: true,
-                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
+                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
 
                         }];                        
                         
@@ -625,7 +627,7 @@
                           yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
                           yCritical[i] = $scope.jsonData.fullData[i].critical_level;
                         };
-                         Highcharts.chart('mychart', {
+                         Highcharts.chart('temperatara', {
                             title: {
                                 text: $scope.jsonData.flooddata.name_station
                             },
@@ -642,7 +644,7 @@
                                 data: yTemperatara
                             }]                      
                         });
-                         Highcharts.chart('mychart2', {
+                         Highcharts.chart('waterlevel', {
                             title: {
                                 text: $scope.jsonData.flooddata.name_station
                             },
@@ -669,7 +671,7 @@
                            lat: $scope.jsonData.lat*1,
                               lng: $scope.jsonData.lng*1,
                               focus: true,
-                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare
+                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C"
                         }];
                       }         
                     }
@@ -690,6 +692,36 @@
                     drawnItems.addLayer(layer);
                     console.log(JSON.stringify(layer.toGeoJSON()));
 
+                  if($scope.startDate != undefined || $scope.finishDate != undefined){
+                  var s_day = $scope.startDate.getDate();
+                  var s_month = $scope.startDate.getMonth()+1;
+                  var s_year = $scope.startDate.getFullYear();
+
+                  var f_day = $scope.finalDate.getDate();
+                  var f_month = $scope.finalDate.getMonth()+1;
+                  var f_year = $scope.finalDate.getFullYear();
+
+
+                  if(s_day<10){
+                    s_day = "0"+s_day;
+                  }
+                  if(s_month<10){
+                    s_month = "0"+s_month;
+                  }
+                  if(f_day<10){
+                    f_day = "0"+f_day;
+                  }
+                  if(f_month<10){
+                    f_month = "0"+f_month;
+                  }
+                  var begin = s_year+"-"+s_month+"-"+s_day;
+                  var finish = f_year+"-"+f_month+"-"+f_day;
+                }
+                else{
+                  var begin = null;
+                  var finish = null;
+                }
+               
                     if(layer.toGeoJSON().geometry.type == "Polygon"){
                       var data = {
                         "type":layer.toGeoJSON().geometry.type,
@@ -702,7 +734,9 @@
                         "x4":layer.toGeoJSON().geometry.coordinates[0][3][0],
                         "y4":layer.toGeoJSON().geometry.coordinates[0][3][1],
                         "x5":layer.toGeoJSON().geometry.coordinates[0][4][0],
-                        "y5":layer.toGeoJSON().geometry.coordinates[0][4][1]
+                        "y5":layer.toGeoJSON().geometry.coordinates[0][4][1],
+                        "startDate":begin,
+                        "finalDate":finish
                       };
                     }
                     else{
@@ -710,10 +744,14 @@
                         "type":layer.toGeoJSON().geometry.type,
                         "x1":layer.toGeoJSON().geometry.coordinates[0],
                         "y1":layer.toGeoJSON().geometry.coordinates[1],
-                        "radius":layer._mRadius
+                        "radius":layer._mRadius,
+                        "startDate":begin,
+                        "finalDate":finish
                       };
                     }
-                    
+                    console.log(begin);
+                    console.log(finish);
+
                     console.log(layer.toGeoJSON());
                     console.log(data);
                     $.ajax({
@@ -725,15 +763,36 @@
                           console.log(jsonData);
                           console.log(jsonData.object[0]);
                           console.log(jsonData.object.length);
+                          console.log(jsonData.object[0][10][0]);
+                          // console.log(jsonData.xData);
+                          // console.log(jsonData.dataset);
+
+                          var xCategories =[];
+                          var yWaterLevel =[];
+                          var yTemperatara =[];
+                          var yCritical = [];
+
 
                           for(i =0 ; i<jsonData.object.length; i++){
-                            $scope.markers.area[i] ={
-                              lat: jsonData.object[i][0]*1,
-                              lng: jsonData.object[i][1]*1,
-                              focus: true,
-                              message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare,
-                              icon: null
-                            };
+                            if(jsonData.object[i][5] != null){
+                              $scope.markers.area[i] ={
+                                lat: jsonData.object[i][0]*1,
+                                lng: jsonData.object[i][1]*1,
+                                focus: true,
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C<br>ค่าสูงสุด:"+jsonData.object[i][5]+"cm<br>ค่าต่ำสุด:"+jsonData.object[i][6]+"cm<br>ค่าเฉลี่ย:"+jsonData.object[i][7]+"cm<br>จำครั้งที่เกิดฝน:"+jsonData.object[i][9]+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+jsonData.object[i][8],
+                                icon: null
+                              };
+                              
+                            }
+                            else{
+                              $scope.markers.area[i] ={
+                                lat: jsonData.object[i][0]*1,
+                                lng: jsonData.object[i][1]*1,
+                                focus: true,
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C",
+                                icon: null
+                              };
+                            }
                             var typeOfPlace = jsonData.object[i][4];
 
                             if(typeOfPlace == "atm"){
@@ -911,6 +970,9 @@
                               $scope.markers.area[i].icon = null;
                             }
                             
+                          }
+                          if(jsonData.object.length == 0){
+                            alert("ไม่มีสถานที่ในพื้นที่ที่ต้องการ");
                           }                       
 
                       }, function myError(response) {
@@ -933,7 +995,7 @@
               <h4 style="color:white">Web Application for Query and Analyze Spatial - Temporal Flood Data in Chiang Rai</h4>
             </div>
             <div class="col-md-12">
-              <h4 style="color:white">เว็บแอพพลิเคชั่นเพื่อสืบค้นและวิเคราะห์ข้อมูลน้ำท่วมเชิงพื้นที่และเชิงเวลาของจังหวัดเชียงราย</h4>
+              <h4 style="color:white">เว็บแอพพลิเคชันเพื่อสืบค้นและวิเคราะห์ข้อมูลน้ำท่วมเชิงพื้นที่และเชิงเวลาของจังหวัดเชียงราย</h4>
             </div>
             </div>
         </nav>
@@ -960,10 +1022,25 @@
           </div>    
         </div>
       </div>
-      <div class="row">                   
-          <div id="mychart"></div>
-          <div id="mychart2"></div>
+      <br><br>
+      <div class="row">   
+        <div class="col-md-6">
+          <div id="temperatara"></div>
+        </div>
+
+        <div class="col-md-6"> 
+          <div id="waterlevel"></div>
+        </div>         
+         
       </div>     
     </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+  
+
+     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'bower-rails'
+# gem 'bower-rails'
 gem 'angularjs-rails'
 gem 'angular-leaflet-rails'
 # gem 'angular-leaflet-rails-too'

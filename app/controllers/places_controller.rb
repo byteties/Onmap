@@ -1607,10 +1607,6 @@ class PlacesController < ApplicationController
   					object << array
 				end
 			end
-			respond_to do |format|  
-			    format.json { render json: {"object"=>object}, status: :ok}
-			    format.html 		    
-			end 		
 		elsif (type == "Polygon")
 			x1 = params[:x1]
 			y1 = params[:y1]
@@ -1630,6 +1626,8 @@ class PlacesController < ApplicationController
 			polygon = 'POLYGON(('+x1+' '+y1+','+x2+' '+y2+','+x3+' '+y3+','+x4+' '+y4+','+x5+' '+y5+'))'
 			object = []
 			array = []
+			waterchart = []
+			dataset = []
 			count = Place.count
 			for i in 1..count
 				data = Place.find(i)
@@ -1641,7 +1639,14 @@ class PlacesController < ApplicationController
 						avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").average(:water_level).to_f
 						sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkflood)				
 						sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
-						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")							
+						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")	
+
+						waterData = Storage.select(:water_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:water_level).uniq
+						temperatareData = Storage.select(:temperatare).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:temperatare).uniq
+						criticalData = Storage.select(:critical_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:critical_level).uniq
+						name = data.place_name
+						unit_temp = "°C"
+						unit_water = "cm"
 					end
 					nameplace = data.place_name
 					typeplace = data.place_type
@@ -1650,16 +1655,19 @@ class PlacesController < ApplicationController
 					lat = data.place_lonlat.y
 					if(startDate != nil || finalDate != nil)
   						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
+  						waterchart = [name,waterData,criticalData,unit_water]
   					else
   						array =[lat,lng,flooddata,nameplace,typeplace]
   					end
   					object << array
+  					dataset << waterchart
 				end
 			end
-			respond_to do |format|  
-			    format.json { render json: {"object"=>object}, status: :ok}
-			    format.html 		    
-			end 
+			xData = Storage.select(:time).where("time BETWEEN '#{startDate}' AND '#{finalDate}'").map(&:time).uniq
+		end
+		respond_to do |format|  
+		    format.json { render json: {"object"=>object,"xData"=>xData,"dataset"=>dataset}, status: :ok}
+		    format.html 		    
 		end
 	end
 end
