@@ -1641,12 +1641,12 @@ class PlacesController < ApplicationController
 						sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
 						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")	
 
-						waterData = Storage.select(:water_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:water_level).uniq
-						temperatareData = Storage.select(:temperatare).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:temperatare).uniq
-						criticalData = Storage.select(:critical_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:critical_level).uniq
-						name = data.place_name
-						unit_temp = "°C"
-						unit_water = "cm"
+						# waterData = Storage.select(:water_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:water_level).uniq
+						# temperatareData = Storage.select(:temperatare).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:temperatare).uniq
+						# criticalData = Storage.select(:critical_level).where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").map(&:critical_level).uniq
+						# name = data.place_name
+						# unit_temp = "°C"
+						# unit_water = "cm"
 					end
 					nameplace = data.place_name
 					typeplace = data.place_type
@@ -1655,18 +1655,18 @@ class PlacesController < ApplicationController
 					lat = data.place_lonlat.y
 					if(startDate != nil || finalDate != nil)
   						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
-  						waterchart = [name,waterData,criticalData,unit_water]
+  						# waterchart = [name,waterData,criticalData,unit_water]
   					else
   						array =[lat,lng,flooddata,nameplace,typeplace]
   					end
   					object << array
-  					dataset << waterchart
+  					# dataset << waterchart
 				end
 			end
-			xData = Storage.select(:time).where("time BETWEEN '#{startDate}' AND '#{finalDate}'").map(&:time).uniq
+			# xData = Storage.select(:time).where("time BETWEEN '#{startDate}' AND '#{finalDate}'").map(&:time).uniq
 		end
 		respond_to do |format|  
-		    format.json { render json: {"object"=>object,"xData"=>xData,"dataset"=>dataset}, status: :ok}
+		    format.json { render json: {"object"=>object}, status: :ok}
 		    format.html 		    
 		end
 	end

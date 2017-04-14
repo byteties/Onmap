@@ -48,6 +48,10 @@
               "iconUrl": '<%= asset_path 'atm.png' %>',
               "iconSize": [25, 25]
             };
+            $scope.attraction = {
+              "iconUrl": '<%= asset_path 'attraction.png' %>',
+              "iconSize": [25, 25]
+            };
             $scope.bank = {
               "iconUrl": '<%= asset_path 'bank.png' %>',
               "iconSize": [25, 25]
@@ -90,6 +94,10 @@
             };
             $scope.car_wash = {
               "iconUrl": '<%= asset_path 'car_wash.png' %>',
+              "iconSize": [25, 25]
+            };
+            $scope.cave = {
+              "iconUrl": '<%= asset_path 'cave.png' %>',
               "iconSize": [25, 25]
             };
             $scope.church = {
@@ -256,6 +264,10 @@
               "iconUrl": '<%= asset_path 'theme_park.png' %>',
               "iconSize": [25, 25]
             };
+            $scope.toilets = {
+              "iconUrl": '<%= asset_path 'toilets.png' %>',
+              "iconSize": [25, 25]
+            };
             $scope.townhall = {
               "iconUrl": '<%= asset_path 'townhall.png' %>',
               "iconSize": [25, 25]
@@ -297,14 +309,12 @@
                         TG03: {
                             lat: 19.54796,
                             lng: 99.47359,
-                            focus: true,
                             message: "สถานี : <%= @data[0][0]%><br>"+"อุณหภูมิ : <%= @data[0][1]%><br>"+"ระดับน้ำ : <%= @data[0][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[0][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[0][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[0][5]%>",
                             icon: $scope.icon
                         },
                         TG04: {
                             lat: 19.62297,
                             lng: 99.47661,        
-                            focus: true,
                              message: "สถานี : <%= @data[1][0]%><br>"+"อุณหภูมิ : <%= @data[1][1]%><br>"+"ระดับน้ำ : <%= @data[1][2]%> cm<br>"+"ระดับน้ำวิกฤษ : <%= @data[1][3]%> cm<br>"+"สถานะการเกิดฝน : <%= @data[1][4]%><br>"+"สถานะการเกิดน้ำท่วม : <%= @data[1][5]%>",
                             icon: $scope.icon
                         },
@@ -776,7 +786,6 @@
                               $scope.markers.area[i] ={
                                 lat: jsonData.object[i][0]*1,
                                 lng: jsonData.object[i][1]*1,
-                                focus: true,
                                 message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C<br>ค่าสูงสุด:"+jsonData.object[i][5]+"cm<br>ค่าต่ำสุด:"+jsonData.object[i][6]+"cm<br>ค่าเฉลี่ย:"+jsonData.object[i][7]+"cm<br>จำครั้งที่เกิดฝน:"+jsonData.object[i][9]+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+jsonData.object[i][8],
                                 icon: null
                               };
@@ -786,8 +795,7 @@
                               $scope.markers.area[i] ={
                                 lat: jsonData.object[i][0]*1,
                                 lng: jsonData.object[i][1]*1,
-                                focus: true,
-                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C",
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ประเภท:"+jsonData.object[i][4]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C",
                                 icon: null
                               };
                             }
@@ -796,11 +804,17 @@
                             if(typeOfPlace == "atm"){
                               $scope.markers.area[i].icon = $scope.atm;
                             }
+                            else if(typeOfPlace == "attraction"){
+                              $scope.markers.area[i].icon = $scope.attraction;
+                            }
                             else if(typeOfPlace == "bank"){
                               $scope.markers.area[i].icon = $scope.bank;
                             }
                             else if(typeOfPlace == "bar"){
                               $scope.markers.area[i].icon = $scope.bar;
+                            }
+                            else if(typeOfPlace == "barn"){
+                              $scope.markers.area[i].icon = $scope.barn;
                             }
                             else if(typeOfPlace == "bbq"){
                               $scope.markers.area[i].icon = $scope.bbq;
@@ -820,19 +834,22 @@
                             else if(typeOfPlace == "camp_site"){
                               $scope.markers.area[i].icon = $scope.camp_site;
                             }
-                            else if(typeOfPlace == "car_rental"){
+                            else if(typeOfPlace == "car_rental" || typeOfPlace == "motorcycle_parking"){
                               $scope.markers.area[i].icon = $scope.car_rental;
                             }
                             else if(typeOfPlace == "car_wash"){
                               $scope.markers.area[i].icon = $scope.car_wash;
                             }
-                            else if(typeOfPlace == "church"){
+                            else if(typeOfPlace == "cave" || typeOfPlace == "yes"){
+                              $scope.markers.area[i].icon = $scope.cave;
+                            }
+                            else if(typeOfPlace == "church" || typeOfPlace == "christian"){
                               $scope.markers.area[i].icon = $scope.church;
                             }
-                            else if(typeOfPlace == "college"){
+                            else if(typeOfPlace == "college" || typeOfPlace == "university"){
                               $scope.markers.area[i].icon = $scope.college;
                             }
-                            else if(typeOfPlace == "company"){
+                            else if(typeOfPlace == "company" || typeOfPlace == "rice_mill"){
                               $scope.markers.area[i].icon = $scope.company;
                             }
                             else if(typeOfPlace == "cosmetic"){
@@ -856,13 +873,13 @@
                             else if(typeOfPlace == "fuel"){
                               $scope.markers.area[i].icon = $scope.fuel;
                             }
-                            else if(typeOfPlace == "government"){
+                            else if(typeOfPlace == "government" || typeOfPlace == "administrative"){
                               $scope.markers.area[i].icon = $scope.government;
                             }
-                            else if(typeOfPlace == "grave_yard"){
+                            else if(typeOfPlace == "grave_yard" || typeOfPlace == "graveyard"){
                               $scope.markers.area[i].icon = $scope.grave_yard;
                             }
-                            else if(typeOfPlace == "guest_house"){
+                            else if(typeOfPlace == "guest_house" || typeOfPlace == "alpine_hut"){
                               $scope.markers.area[i].icon = $scope.guest_house;
                             }
                             else if(typeOfPlace == "gutter"){
@@ -871,13 +888,13 @@
                             else if(typeOfPlace == "hospital"){
                               $scope.markers.area[i].icon = $scope.hospital;
                             }
-                            else if(typeOfPlace == "hostel"){
+                            else if(typeOfPlace == "hostel" || typeOfPlace == "motel"){
                               $scope.markers.area[i].icon = $scope.hostel;
                             }
                             else if(typeOfPlace == "hotel"){
                               $scope.markers.area[i].icon = $scope.hotel;
                             }
-                            else if(typeOfPlace == "house"){
+                            else if(typeOfPlace == "house" || typeOfPlace == "barn"){
                               $scope.markers.area[i].icon = $scope.house;
                             }
                             else if(typeOfPlace == "insurance"){
@@ -919,7 +936,7 @@
                             else if(typeOfPlace == "pub"){
                               $scope.markers.area[i].icon = $scope.pub;
                             }
-                            else if(typeOfPlace == "public_building"){
+                            else if(typeOfPlace == "public_building" || typeOfPlace == "officer" || typeOfPlace == "courthouse"){
                               $scope.markers.area[i].icon = $scope.public_building;
                             }
                             else if(typeOfPlace == "residential"){
@@ -948,6 +965,9 @@
                             }
                             else if(typeOfPlace == "theme_park"){
                               $scope.markers.area[i].icon = $scope.theme_park;
+                            }
+                            else if(typeOfPlace == "toilets"){
+                              $scope.markers.area[i].icon = $scope.toilets;
                             }
                             else if(typeOfPlace == "townhall"){
                               $scope.markers.area[i].icon = $scope.townhall;
