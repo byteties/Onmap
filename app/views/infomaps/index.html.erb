@@ -554,143 +554,8 @@
                             visible: true
                           }
                     }  
-            };
-            
-            $scope.$on("leafletDirectiveMap.click", function(event, args){
-                var e = args.leafletEvent;
-                var lat = e.latlng.lat.toString();
-                var lng = e.latlng.lng.toString();
-                if($scope.startDate != undefined || $scope.finishDate != undefined){
-                  var s_day = $scope.startDate.getDate();
-                  var s_month = $scope.startDate.getMonth()+1;
-                  var s_year = $scope.startDate.getFullYear();
-
-                  var f_day = $scope.finalDate.getDate();
-                  var f_month = $scope.finalDate.getMonth()+1;
-                  var f_year = $scope.finalDate.getFullYear();
-
-
-                  if(s_day<10){
-                    s_day = "0"+s_day;
-                  }
-                  if(s_month<10){
-                    s_month = "0"+s_month;
-                  }
-                  if(f_day<10){
-                    f_day = "0"+f_day;
-                  }
-                  if(f_month<10){
-                    f_month = "0"+f_month;
-                  }
-                  var begin = s_year+"-"+s_month+"-"+s_day;
-                  var finish = f_year+"-"+f_month+"-"+f_day;
-                }
-                else{
-                  var begin = null;
-                  var finish = null;
-                }
-                var data = { 
-                  "lat":lat,
-                  "lng":lng,
-                  "startDate":begin,
-                  "finalDate":finish
-                };
-                console.log(begin);
-                console.log(finish);
-                console.log(data);
-                $.ajax({
-                method : "GET",
-                url : "infomaps/point",
-                data : data
-                }).then(function mySucces(response) {
-                    $scope.jsonData = angular.fromJson(response);
-                    console.log($scope.jsonData);
-                    
-                    if($scope.jsonData != undefined){
-                      if($scope.jsonData.flooddata.temperatare == null){
-                        var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
-                       
-                      } 
-                      else{
-                        var numTemperatare = $scope.jsonData.flooddata.temperatare+"°C";
-                        
-                      }
-                      if($scope.jsonData.maxlevel != null){              
-                        $scope.markers.point = [{
-                              lat: $scope.jsonData.lat*1,
-                              lng: $scope.jsonData.lng*1,
-                              focus: true,
-                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
-
-                        }];                        
-                        
-                        var xCategories =[];
-                        var yWaterLevel =[];
-                        var yTemperatara =[];
-                        var yCritical = [];
-
-                        for(var i=0; i<$scope.jsonData.fullData.length ;i++){
-                          xCategories[i] = $scope.jsonData.fullData[i].time;
-                          yWaterLevel[i] = $scope.jsonData.fullData[i].water_level;
-                          yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
-                          yCritical[i] = $scope.jsonData.fullData[i].critical_level;
-                        };
-                         Highcharts.chart('temperatara', {
-                            title: {
-                                text: $scope.jsonData.flooddata.name_station
-                            },
-                            subtitle: {
-                                text: 'อุณหภูมิ'
-                            },
-
-                            xAxis: {
-                                categories: xCategories
-                            },
-
-                            series: [{
-                                name: 'อุณหภูมิ',
-                                data: yTemperatara
-                            }]                      
-                        });
-                         Highcharts.chart('waterlevel', {
-                            title: {
-                                text: $scope.jsonData.flooddata.name_station
-                            },
-                            subtitle: {
-                                text: 'ระดับน้ำ'
-                            },
-
-                            xAxis: {
-                                categories: xCategories
-                            },
-
-                            series: [{
-                                name: 'ระดับน้ำ',
-                                data: yWaterLevel
-                            },
-                            {
-                              name: 'ระดับวิกฤษ',
-                              data: yCritical
-                            }]                      
-                        });
-                      }
-                      else{
-                        $scope.markers.point = [{
-                           lat: $scope.jsonData.lat*1,
-                              lng: $scope.jsonData.lng*1,
-                              focus: true,
-                              message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C"
-                        }];
-                      }         
-                    }
-                    else{               
-                      alert("บริเวณนี้ไม่มีข้อมูล");
-                    }
-                    
-                }, function myError(response) {
-                    $scope.myWelcome = response.statusText;
-                });          
-            });            
+            };           
+          
 
             leafletData.getMap().then(function(map) {
                leafletData.getLayers().then(function(baselayers) {
@@ -729,7 +594,13 @@
                   var begin = null;
                   var finish = null;
                 }
-               
+                if(layer._mRadius == undefined){
+                  var radius = null;
+                }
+                else{
+                  var radius = layer._mRadius;
+                }
+                   
                     if(layer.toGeoJSON().geometry.type == "Polygon"){
                       var data = {
                         "type":layer.toGeoJSON().geometry.type,
@@ -752,7 +623,7 @@
                         "type":layer.toGeoJSON().geometry.type,
                         "x1":layer.toGeoJSON().geometry.coordinates[0],
                         "y1":layer.toGeoJSON().geometry.coordinates[1],
-                        "radius":layer._mRadius,
+                        "radius":radius,
                         "startDate":begin,
                         "finalDate":finish
                       };
@@ -762,7 +633,102 @@
 
                     console.log(layer.toGeoJSON());
                     console.log(data);
-                    $.ajax({
+                    if(radius == null && layer.toGeoJSON().geometry.type != "Polygon"){
+                      $.ajax({
+                        method : "GET",
+                        url : "infomaps/point",
+                        data : data
+                        }).then(function mySucces(response) {
+                            $scope.jsonData = angular.fromJson(response);
+                            console.log($scope.jsonData);
+                            
+                            if($scope.jsonData != undefined){
+                              if($scope.jsonData.flooddata.temperatare == null){
+                                var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
+                               
+                              } 
+                              else{
+                                var numTemperatare = $scope.jsonData.flooddata.temperatare;
+                                
+                              }
+                              if($scope.jsonData.maxlevel != null){              
+                                $scope.markers.point = [{
+                                      lat: $scope.jsonData.lat*1,
+                                      lng: $scope.jsonData.lng*1,
+                                      focus: true,
+                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
+
+                                }];                        
+                                
+                                var xCategories =[];
+                                var yWaterLevel =[];
+                                var yTemperatara =[];
+                                var yCritical = [];
+
+                                for(var i=0; i<$scope.jsonData.fullData.length ;i++){
+                                  xCategories[i] = $scope.jsonData.fullData[i].time;
+                                  yWaterLevel[i] = $scope.jsonData.fullData[i].water_level;
+                                  yTemperatara[i] = $scope.jsonData.fullData[i].temperatare;
+                                  yCritical[i] = $scope.jsonData.fullData[i].critical_level;
+                                };
+                                 Highcharts.chart('temperatara', {
+                                    title: {
+                                        text: $scope.jsonData.flooddata.name_station
+                                    },
+                                    subtitle: {
+                                        text: 'อุณหภูมิ'
+                                    },
+
+                                    xAxis: {
+                                        categories: xCategories
+                                    },
+
+                                    series: [{
+                                        name: 'อุณหภูมิ',
+                                        data: yTemperatara
+                                    }]                      
+                                });
+                                 Highcharts.chart('waterlevel', {
+                                    title: {
+                                        text: $scope.jsonData.flooddata.name_station
+                                    },
+                                    subtitle: {
+                                        text: 'ระดับน้ำ'
+                                    },
+
+                                    xAxis: {
+                                        categories: xCategories
+                                    },
+
+                                    series: [{
+                                        name: 'ระดับน้ำ',
+                                        data: yWaterLevel
+                                    },
+                                    {
+                                      name: 'ระดับวิกฤษ',
+                                      data: yCritical
+                                    }]                      
+                                });
+                              }
+                              else{
+                                $scope.markers.point = [{
+                                   lat: $scope.jsonData.lat*1,
+                                      lng: $scope.jsonData.lng*1,
+                                      focus: true,
+                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C"
+                                }];
+                              }         
+                            }
+                            else{               
+                              alert("บริเวณนี้ไม่มีข้อมูล");
+                            }
+                            
+                        }, function myError(response) {
+                            $scope.myWelcome = response.statusText;
+                        }); 
+                      }
+                    else{
+                      $.ajax({
                       method : "GET",
                       url : "places/findplace",
                       data : data
@@ -771,7 +737,7 @@
                           console.log(jsonData);
                           console.log(jsonData.object[0]);
                           console.log(jsonData.object.length);
-                          console.log(jsonData.object[0][10][0]);
+                          // console.log(jsonData.object[0][10][0]);
                           // console.log(jsonData.xData);
                           // console.log(jsonData.dataset);
 
@@ -995,7 +961,8 @@
 
                       }, function myError(response) {
                           $scope.myWelcome = response.statusText;
-                    });    
+                      });
+                    }
                   });
                });
             });

@@ -1569,13 +1569,13 @@ class PlacesController < ApplicationController
 		type = params[:type]
 		startDate = params[:startDate]
 		finalDate = params[:finalDate]
+		radius = params[:radius]
 
 		if(type == "Point")
 			object = []
 			array = []
 			x1 = params[:x1]
 			y1 = params[:y1]
-			radius = params[:radius]
 			point = 'POINT('+x1+' '+y1+')'
 			count = Place.count
 			for i in 1..count
@@ -1607,6 +1607,7 @@ class PlacesController < ApplicationController
   					object << array
 				end
 			end
+
 		elsif (type == "Polygon")
 			x1 = params[:x1]
 			y1 = params[:y1]

@@ -33,11 +33,11 @@ class InfomapsController < ApplicationController
 	end
 
 	def point		
-		lng = params[:lng][0..8]
-		lat = params[:lat][0..8]
+		x1 = params[:x1]
+		y1 = params[:y1]
 		startDate = params[:startDate]
 		finalDate = params[:finalDate]
-			point = 'POINT('+lng+' '+lat+')'
+			point = 'POINT('+x1+' '+y1+')'
 			count = Infomap.count
 			for i in 1..count
 				data = Infomap.find(i)
@@ -54,7 +54,7 @@ class InfomapsController < ApplicationController
 								fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}")							
 							end		
 							flooddata = Storage.where(infomap_id: data.id).last
-	    					format.json { render json: {"lat"=> lat,"lng"=>lng ,"flooddata" =>flooddata ,"maxlevel"=>maxlevel,"minlevel"=>minlevel,"avglevel"=>avglevel,"sumflood"=>sumflood,"sumrain"=>sumrain,"fullData" => fullData}}
+	    					format.json { render json: {"lat"=> y1,"lng"=>x1 ,"flooddata" =>flooddata ,"maxlevel"=>maxlevel,"minlevel"=>minlevel,"avglevel"=>avglevel,"sumflood"=>sumflood,"sumrain"=>sumrain,"fullData" => fullData}}
 	  					end
 	  					break
 					end
