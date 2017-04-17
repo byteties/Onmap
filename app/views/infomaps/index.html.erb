@@ -600,29 +600,22 @@
                 else{
                   var radius = layer._mRadius;
                 }
-                   
-                    if(layer.toGeoJSON().geometry.type == "Polygon"){
+                var type = layer.toGeoJSON().geometry.type
+                var coordinates = layer.toGeoJSON().geometry.coordinates
+                    if(type == "Polygon"){
                       var data = {
-                        "type":layer.toGeoJSON().geometry.type,
-                        "x1":layer.toGeoJSON().geometry.coordinates[0][0][0],
-                        "y1":layer.toGeoJSON().geometry.coordinates[0][0][1],
-                        "x2":layer.toGeoJSON().geometry.coordinates[0][1][0],
-                        "y2":layer.toGeoJSON().geometry.coordinates[0][1][1],
-                        "x3":layer.toGeoJSON().geometry.coordinates[0][2][0],
-                        "y3":layer.toGeoJSON().geometry.coordinates[0][2][1],
-                        "x4":layer.toGeoJSON().geometry.coordinates[0][3][0],
-                        "y4":layer.toGeoJSON().geometry.coordinates[0][3][1],
-                        "x5":layer.toGeoJSON().geometry.coordinates[0][4][0],
-                        "y5":layer.toGeoJSON().geometry.coordinates[0][4][1],
+                        "type":type,
+                        "coordinates":coordinates,
+                        "length":coordinates[0].length-1,
                         "startDate":begin,
                         "finalDate":finish
                       };
                     }
                     else{
                       var data = {
-                        "type":layer.toGeoJSON().geometry.type,
-                        "x1":layer.toGeoJSON().geometry.coordinates[0],
-                        "y1":layer.toGeoJSON().geometry.coordinates[1],
+                        "type":type,
+                        "x1":coordinates[0],
+                        "y1":coordinates[1],
                         "radius":radius,
                         "startDate":begin,
                         "finalDate":finish
@@ -737,10 +730,6 @@
                           console.log(jsonData);
                           console.log(jsonData.object[0]);
                           console.log(jsonData.object.length);
-                          // console.log(jsonData.object[0][10][0]);
-                          // console.log(jsonData.xData);
-                          // console.log(jsonData.dataset);
-
                           var xCategories =[];
                           var yWaterLevel =[];
                           var yTemperatara =[];
