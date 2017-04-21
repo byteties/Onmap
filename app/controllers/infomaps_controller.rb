@@ -48,7 +48,7 @@ class InfomapsController < ApplicationController
 							if(startDate != nil || finalDate != nil)
 		    					maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").maximum(:water_level)
 		    					minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").minimum(:water_level)
-								avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").average(:water_level).to_f
+								avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").average(:water_level).to_f.round(2)
 								sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkflood)				
 								sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}").sum(:checkrain)	
 								fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.id}")							

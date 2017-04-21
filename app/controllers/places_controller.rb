@@ -1570,7 +1570,7 @@ class PlacesController < ApplicationController
 		startDate = params[:startDate]
 		finalDate = params[:finalDate]
 		radius = params[:radius]
-
+		placetype = params[:placetype]
 		if(type == "Point")
 			object = []
 			array = []
@@ -1580,31 +1580,33 @@ class PlacesController < ApplicationController
 			count = Place.count
 			for i in 1..count
 				data = Place.find(i)
-				checkincircle = Place.find_by_sql("SELECT name_station FROM infomaps
-				WHERE ST_DWithin(
-					ST_GeometryFromText('#{point}'),
-					ST_GeometryFromText('#{data.place_lonlat}'),
-					#{radius},true)")
-				if(checkincircle != [])
-					if(startDate != nil || finalDate != nil)
-	    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").maximum(:water_level)
-	    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").minimum(:water_level)
-						avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").average(:water_level).to_f
-						sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkflood)				
-						sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
-						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")							
+				if(data.place_type == "#{placetype}" || placetype == nil)
+					checkincircle = Place.find_by_sql("SELECT name_station FROM infomaps
+					WHERE ST_DWithin(
+						ST_GeometryFromText('#{point}'),
+						ST_GeometryFromText('#{data.place_lonlat}'),
+						#{radius},true)")
+					if(checkincircle != [])
+						if(startDate != nil || finalDate != nil)
+		    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").maximum(:water_level)
+		    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").minimum(:water_level)
+							avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").average(:water_level).to_f.round(2)
+							sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkflood)				
+							sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
+							fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")							
+						end
+						nameplace = data.place_name
+						typeplace = data.place_type
+						flooddata = Storage.where(infomap_id: data.place_infomap_id).last
+						lng = data.place_lonlat.x
+						lat = data.place_lonlat.y
+						if(startDate != nil || finalDate != nil)
+	  						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
+	  					else
+	  						array =[lat,lng,flooddata,nameplace,typeplace]
+	  					end
+	  					object << array
 					end
-					nameplace = data.place_name
-					typeplace = data.place_type
-					flooddata = Storage.where(infomap_id: data.place_infomap_id).last
-					lng = data.place_lonlat.x
-					lat = data.place_lonlat.y
-					if(startDate != nil || finalDate != nil)
-  						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
-  					else
-  						array =[lat,lng,flooddata,nameplace,typeplace]
-  					end
-  					object << array
 				end
 			end
 
@@ -1642,27 +1644,29 @@ class PlacesController < ApplicationController
 			count = Place.count
 			for i in 1..count
 				data = Place.find(i)
-				checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{data.place_lonlat}'),ST_GeomFromText('#{polygon}'))")
-				if(checkinpolygon != [])
-					if(startDate != nil || finalDate != nil)
-	    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").maximum(:water_level)
-	    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").minimum(:water_level)
-						avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").average(:water_level).to_f
-						sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkflood)				
-						sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
-						fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")	
+				if(data.place_type == "#{placetype}" || placetype == nil)
+					checkinpolygon = Infomap.find_by_sql("SELECT name_station FROM infomaps WHERE ST_Within(ST_GeomFromText('#{data.place_lonlat}'),ST_GeomFromText('#{polygon}'))")
+					if(checkinpolygon != [])
+						if(startDate != nil || finalDate != nil)
+		    				maxlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").maximum(:water_level)
+		    				minlevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").minimum(:water_level)
+							avglevel = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").average(:water_level).to_f.round(2)
+							sumflood = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkflood)				
+							sumrain = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}").sum(:checkrain)	
+							fullData = Storage.where("time BETWEEN '#{startDate}' AND '#{finalDate}' AND infomap_id=#{data.place_infomap_id}")	
+						end
+						nameplace = data.place_name
+						typeplace = data.place_type
+						flooddata = Storage.where(infomap_id: data.place_infomap_id).last
+						lng = data.place_lonlat.x
+						lat = data.place_lonlat.y
+						if(startDate != nil || finalDate != nil)
+	  						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
+	  					else
+	  						array =[lat,lng,flooddata,nameplace,typeplace]
+	  					end
+	  					object << array
 					end
-					nameplace = data.place_name
-					typeplace = data.place_type
-					flooddata = Storage.where(infomap_id: data.place_infomap_id).last
-					lng = data.place_lonlat.x
-					lat = data.place_lonlat.y
-					if(startDate != nil || finalDate != nil)
-  						array =[lat,lng,flooddata,nameplace,typeplace,maxlevel,minlevel,avglevel,sumflood,sumrain,fullData]
-  					else
-  						array =[lat,lng,flooddata,nameplace,typeplace]
-  					end
-  					object << array
 				end
 			end
 		end
