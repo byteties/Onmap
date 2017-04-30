@@ -21,6 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
     <%= javascript_include_tag "leftlet_directive.js"%>
+
     <script>
         var getJson = setInterval(myTimer, 3600000);
 
@@ -500,6 +501,7 @@
                         }
                     },
                     point :[],
+                    point2 :[],
                     area: []
             };
 
@@ -545,6 +547,11 @@
                           },
                           point: {
                             name: 'Clicked Point',
+                            type: 'group',
+                            visible: true
+                          },
+                          point2: {
+                            name: 'Clicked Point2',
                             type: 'group',
                             visible: true
                           },
@@ -640,7 +647,7 @@
                         }).then(function mySucces(response) {
                             $scope.jsonData = angular.fromJson(response);
                             console.log($scope.jsonData);
-                            $scope.markers.point = [];
+                            // $scope.markers.point = [];
                             if($scope.jsonData != undefined){
                               if($scope.jsonData.flooddata.temperatare == null){
                                 var numTemperatare = "สถานีนี้ไม่สามารถอ่านค่าอุณหภูมิ";
@@ -655,7 +662,7 @@
                                       lat: $scope.jsonData.lat*1,
                                       lng: $scope.jsonData.lng*1,
                                       focus: true,
-                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood
+                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C<br>ค่าสูงสุด:"+$scope.jsonData.maxlevel+"cm<br>ค่าต่ำสุด:"+$scope.jsonData.minlevel+"cm<br>ค่าเฉลี่ย:"+$scope.jsonData.avglevel+"cm<br>จำครั้งที่เกิดฝน:"+$scope.jsonData.sumrain+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+$scope.jsonData.sumflood+"<br>ข้อมูลล่าสุด ณ เวลา:"+$scope.jsonData.flooddata.time
 
                                 }];                        
                                 
@@ -714,7 +721,7 @@
                                    lat: $scope.jsonData.lat*1,
                                       lng: $scope.jsonData.lng*1,
                                       focus: true,
-                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C"
+                                      message: "ชื่อสถานี:"+$scope.jsonData.flooddata.name_station+"<br>ระดับน้ำ:"+$scope.jsonData.flooddata.water_level+"cm<br>ระดับน้ำวิกฤต:"+$scope.jsonData.flooddata.critical_level+"cm<br>อุณหภูมิ:"+numTemperatare+"°C"+"<br>ข้อมูล ณ เวลา:"+$scope.jsonData.flooddata.time
                                 }];
                               }         
                             }
@@ -747,7 +754,7 @@
                               $scope.markers.area[i] ={
                                 lat: jsonData.object[i][0]*1,
                                 lng: jsonData.object[i][1]*1,
-                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C<br>ค่าสูงสุด:"+jsonData.object[i][5]+"cm<br>ค่าต่ำสุด:"+jsonData.object[i][6]+"cm<br>ค่าเฉลี่ย:"+jsonData.object[i][7]+"cm<br>จำครั้งที่เกิดฝน:"+jsonData.object[i][9]+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+jsonData.object[i][8],
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ประเภท:"+jsonData.object[i][4]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C<br>ค่าสูงสุด:"+jsonData.object[i][5]+"cm<br>ค่าต่ำสุด:"+jsonData.object[i][6]+"cm<br>ค่าเฉลี่ย:"+jsonData.object[i][7]+"cm<br>จำครั้งที่เกิดฝน:"+jsonData.object[i][9]+"<br>จำนวนครั้งที่เกิดน้ำท่วม:"+jsonData.object[i][8]+"<br>อ้างอิงข้อมูลจากสถานี:"+jsonData.object[i][2].name_station+"<br>ข้อมูลล่าสุด ณ เวลา:"+jsonData.object[i][2].time,
                                 icon: null
                               };
                               
@@ -756,7 +763,7 @@
                               $scope.markers.area[i] ={
                                 lat: jsonData.object[i][0]*1,
                                 lng: jsonData.object[i][1]*1,
-                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ประเภท:"+jsonData.object[i][4]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C",
+                                message: "ชื่อสถานี:"+jsonData.object[i][3]+"<br>ประเภท:"+jsonData.object[i][4]+"<br>ระดับน้ำ:"+jsonData.object[i][2].water_level+"cm<br>ระดับน้ำวิกฤต:"+jsonData.object[i][2].critical_level+"cm<br>อุณหภูมิ:"+jsonData.object[i][2].temperatare+"°C"+"<br>อ้างอิงข้อมูลจากสถานี:"+jsonData.object[i][2].name_station+"<br>ข้อมูล ณ เวลา:"+jsonData.object[i][2].time,
                                 icon: null
                               };
                             }
@@ -1037,7 +1044,7 @@
           <div id="waterlevel"></div>
         </div>         
          
-      </div>  
+      </div>       
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
