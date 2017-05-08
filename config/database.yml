@@ -22,14 +22,26 @@ test:
  postgis_schema: public          # default is public
  schema_search_path: public,postgis
 
+# production:
+#  adapter: postgis
+#  encoding: unicode
+#  database: Onmap_production
+#  host:     localhost
+#  pool: 5
+#  username: user1
+#  password: password1
+#  postgis_extension: postgis      # default is postgis
+#  postgis_schema: public          # default is public
+#  schema_search_path: public,postgis
+
 production:
- adapter: postgis
- encoding: unicode
- database: Onmap_production
- host:     localhost
- pool: 5
- username: user1
- password: password1
- postgis_extension: postgis      # default is postgis
- postgis_schema: public          # default is public
- schema_search_path: public,postgis
+  adapter:  postgis
+  host:     localhost
+  encoding: unicode
+  database: Onmap_production
+  pool:     5
+  username: postgres
+  password: postgres
+  postgis_extension: postgis      # default is postgis
+  postgis_schema: public          # default is public
+  schema_search_path: public,postgis
