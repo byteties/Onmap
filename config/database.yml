@@ -1,7 +1,7 @@
 development:
  adapter: postgis
  encoding: unicode
- database: Onmap_development
+ database: Onmap_development_2
  host:     localhost
  pool: 5
  username: user1
