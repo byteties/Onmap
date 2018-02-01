@@ -13,5 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+
 //= require angular-leaflet
+//= require angular-resource
+
+//= require angular
+//= require angular-animate
+//= require angular-resource
+
+//= require_tree .
